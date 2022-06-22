@@ -49,7 +49,7 @@ If you’ve taken linear algebra before you might be familiar with basis vectors
 
 Think about our regular 3D coordinate system. We can define any point using a set of units along each axis to the position (x, y, z). If we think of our axes as being lines defined by 3 unit length vectors, then our coordinates are just the factors by which we multiply each of those unit vectors by, then sum, to get the resulting position. 
 
- <b>IMAGE: diagram of standard basis vectors</b>
+![](basis.png)
 
 The basis vectors are the vectors that define a coordinate system. Our standard basis are these unit vectors that define our default axes: $\begin{bmatrix} 1 \\\ 0 \\\ 0 \end{bmatrix}$,
 $\begin{bmatrix} 0 \\\ 1 \\\ 0 \end{bmatrix}$, and $\begin{bmatrix} 0 \\\ 0 \\\ 1 \end{bmatrix}$. When we multiply our transformation matrices, we transform these basis vectors to a new basis that defines a new coordinate system (more on different coordinates later in the lab).
@@ -183,7 +183,7 @@ Now that we've learned how to create a few basic types of transformation matrice
 
 **NOTE: Might need to change the values after demo is made**
 
-**IMAGE: transformation graph**
+![](transforms.png)
 
 You might notice this looks a bit like a modified version of the scene graphs discussed in class. We'll take a closer look at understanding the graph structure later in the lab and in the next lab, but for now let's focus on some of the labeled transformations.
 
@@ -206,7 +206,7 @@ Using our transformation building blocks to make more complex transformations, w
 
 In the stencil code for the lab you should find `insertFileNameHere.cpp` with functions `getMatrixA`, `getMatrixB`, and `getMatrixC`. Each of these functions is used by our program to get transformation matrices A, B, and C as they are described in the graph. **Complete the functions using what we learned about scaling, rotation, and translation** so that they return the correct `glm::mat4` matrices.
 
-**IMAGE: demo**
+![](demoplaceholder.png)
 
 **TODO: as demo is developed insert more specific instructions here for viewing**
 
@@ -216,7 +216,7 @@ In the stencil code for the lab you should find `insertFileNameHere.cpp` with fu
 
 Great! Now we have some basic transformations created.
 
-**IMAGE: transformation graph**
+![](transforms.png)
 
 Looking at our graph again, each leaf of the tree is an object in the scene. Traversing the tree from the object to the root will create a path through all of the transformations applied to that object in the scene. So to transform Object 1 to world space, for example, first apply transformation A then C. The cumulative transformation matrix of an object in the scene, resulting from this ordered multiplication of matrices, is referred to as the object’s **model matrix**.
 
@@ -241,7 +241,7 @@ $$ M_{translate} = \begin{bmatrix} 1 && 0 && 0 && P_x \\\ 0 && 1 && 0 && P_y \\\
 
 The rotation of the camera is fixed by the look and up vectors, look being the direction the camera points and up being the vertical direction relative to the camera's view. 
 
-**IMAGE: camera uvw axes and look + up**
+![](camera.png)
 
 Recall from the lecture that we can use these to calculate axes $u$, $v$, and $w$ of the camera's coordinate system using the following formulas:
 
@@ -266,12 +266,13 @@ Wondering why our view matrix does translation first and then rotation, even tho
 
 As with the objects’ model matrices that we looked at previously, the matrix that represents the transformation of the camera in world space is composed of a rotation first then a translation. Since our view matrix is the inverse, we must reverse the order of the multiplication. Recall:
 
-$$(M_1M_2)^{-1} = M_2^{-1} M_1^{-1}
+$$(M_1M_2)^{-1} = M_2^{-1} M_1^{-1}$$
+
 </details>
 
 **Task 3: Building the View Matrix**
 
-**IMAGE: transformation graph**
+![](transforms.png)
 
 Fill in `getCameraMatrix` to return the view matrix of the camera using the specifications given in the above graph.
 
@@ -301,7 +302,7 @@ In task 2 of this lab you have already found some such transformation matrices f
 
 That was a lot of information! Here’s a simpler graphic that helps to sum up the relationships between everything we covered in this lab:
 
-**IMAGE: graph of Object Space -(Model Matrix)-> World Space -(View Matrix)-> Camera Space**
+![](spaces.png)
 
 The arrows indicate the direction of transformation that the labeled matrix provides. An object’s model matrix will convert from that object’s space to world space. The view matrix will convert from world space to camera space. The inverses of these matrices provide the transformation of the opposite direction of the arrows, going from camera space to world space or world space to object space.
 
@@ -309,7 +310,7 @@ The arrows indicate the direction of transformation that the labeled matrix prov
 
 Now that we have programmed all of the matrices in our graph, we want to make sure that we can actually traverse the graph and find how points are related across different spaces. If the camera sees a point on a cube, we want to be able to take that point (relative to camera space) and find its position relative to world space or object space.
 
-**IMAGE: transformation graph**
+![](transforms.png)
 
 Using the functions you've completed in tasks 1-3 and the graph above, fill in the function `cameraToObj1` so that it returns a matrix that takes points in camera space and transforms them into Object 1's coordinate space, using the matrices that you’ve constructed during previous tasks. 
 
