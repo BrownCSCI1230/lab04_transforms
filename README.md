@@ -76,7 +76,13 @@ $$ \begin{bmatrix} s_x && 0 && 0 \\\ 0 && s_y && 0 \\\ 0 && 0 && s_z \end{bmatri
 \begin{bmatrix} s_xx + 0y + 0z \\\ 0x + s_yy + 0z \\\ 0x + 0y + s_zz \end{bmatrix} =
 \begin{bmatrix} s_xx \\\ s_yy \\\ s_zz \end{bmatrix} $$
 
-**IMAGE: show a square of 4 points scaled with the matrix**
+![](scaling.gif)
+
+$$ \begin{bmatrix} 2 && 0 \\\ 0 && 2 \end{bmatrix}
+\begin{bmatrix} x \\\ y \end{bmatrix} =
+\begin{bmatrix} s_xx + 0y \\\ 0x + s_yy \end{bmatrix} =
+\begin{bmatrix} 2x \\\ 2y \end{bmatrix} $$
+
 
 ### 1.3 Rotation
 
@@ -88,7 +94,11 @@ $$ \begin{bmatrix} \cos\theta && -\sin\theta \\\ \sin\theta && \cos\theta \end{b
 \begin{bmatrix} x \\\ y \end{bmatrix} =
 \begin{bmatrix} x\cos\theta - y\sin\theta \\\ x\sin\theta + y\cos\theta \end{bmatrix} $$
 
-**IMAGE: show a square of 4 points rotated in 2D**
+![](rotating.gif)
+
+$$ \begin{bmatrix} \cos\frac{\pi}{6} && -\sin\frac{\pi}{6} \\\ \sin\frac{\pi}{6} && \cos\frac{\pi}{6} \end{bmatrix}
+\begin{bmatrix} x \\\ y \end{bmatrix} =
+\begin{bmatrix} x\cos\frac{\pi}{6} - y\sin\frac{\pi}{6} \\\ x\sin\frac{\pi}{6} + y\cos\frac{\pi}{6} \end{bmatrix} $$
 
 In 3D, this is a bit more complex. Rather than always rotating about the origin in a fixed and consistent way, 3D allows for rotation around any arbitrary axis. There are many ways to handle this (as covered during the lectures), but for now we'll use the axis-aligned **Euler angles** approach as this is the simplest for constructing your own matrices. For this, we define the rotation about each standard axis independently, and then compose them. We use $R_n$ to notate the rotation matrix about the $n$-axis.
 
@@ -109,7 +119,7 @@ $\begin{bmatrix} 0 \\\ 0 \end{bmatrix}$.
 
 Translation, on the other hand, is an **[affine transformation](https://en.wikipedia.org/wiki/Affine_transformation)**. Unlike linear transformations, affine transformations do not need to preserve the origin. All linear transformations are affine transformations, but some affine transformations are not linear like translation.
 
-**IMAGE: venn diagram of transformation types**
+![](transformtypes.png)
 
 This affects our representation of transformations as matrices because a 2x2 matrix is no longer sufficient for transforming a 2x1 point in this way.\:
 
@@ -168,13 +178,19 @@ $$ \begin{bmatrix} 1 && 0 && 0 && d_x \\\ 0 && 1 && 0 && d_y \\\ 0 && 0 && 1 && 
 
 See how adding the $w$ coordinate allows us to apply the translation using matrix multiplication? Additionally, translation works here on a point because $w=1$. We don't want vectors to be translated because they don't have a location. Vectors represent the difference between two points, defined by having a length and a direction. Neither of these attributes should change with translation, because shifting two points maintains the same displacement between them.
 
-**IMAGE: two points with a vector in between translated**
+![](vectortranslation.png)
 
 Homogeneous coordinates account for this difference between how points and vectors should be transformed. Since $w=0$ for vectors, if we try to translate a vector, we will just end up with the same vector because the translation coordinates are placed in the last column of the matrix which gets multiplied by the $w$ coordinate of the vector:
 
 $$ \begin{bmatrix} 1 && 0 && 0 && d_x \\\ 0 && 1 && 0 && d_y \\\ 0 && 0 && 1 && d_z \\\ 0 && 0 && 0 && 1 \end{bmatrix}
 \begin{bmatrix} x \\\ y \\\ z \\\ 0 \end{bmatrix} = 
 \begin{bmatrix} x \\\ y \\\ z \\\ 0 \end{bmatrix} $$
+
+![](translating.gif)
+
+$$ \begin{bmatrix} 1 && 0 && 1 \\\ 0 && 1 && 1 \\\ 0 && 0 && 1 \end{bmatrix}
+\begin{bmatrix} x \\\ y \\\ 1 \end{bmatrix}
+\begin{bmatrix} x + 1 \\\ y + 1 \\\ 1 \end{bmatrix}$$
 
 ## 2. Applying Multiple Transformations
 
