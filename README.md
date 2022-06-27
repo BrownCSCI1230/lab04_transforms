@@ -204,10 +204,38 @@ One way to prevent this from causing problems in your own code is to use a stand
 
 <details>
 <summary>How does this change the outcome?</summary>
+
+Let's say we have a square at the origin that we want to perform the following transformations on:
+
+- Scale x by 1.5 and y by 2.5
+- Rotate by 45°
+- Translate by (3, 3)
+
+Here's what happens if we translate, then rotate, then scale (SRT):
+
+$$ \begin{bmatrix} 1.5 && 0 && 0 \\\ 0 && 2 && 0 \\\ 0 && 0 && 1 \end{bmatrix}
+\begin{bmatrix} \cos\frac{\pi}{4} && -\sin\frac{\pi}{4} && 0 \\\ \sin\frac{\pi}{4} && \cos\frac{\pi}{4} && 0 \\\ 0 && 0 && 1 \end{bmatrix}
+\begin{bmatrix} 1 && 0 && 3 \\\ 0 && 1 && 3 \\\ 0 && 0 && 1 \end{bmatrix}
+\begin{bmatrix} x \\\ y \\\ 1 \end{bmatrix} =
+\begin{bmatrix} \frac{1.5}{\sqrt{2}}x - \frac{1.5}{\sqrt{2}}y \\\ x\sqrt{2} + y\sqrt{2} + 6\sqrt{2} \\\ 1 \end{bmatrix} $$
   
 <img src="SRT.gif" />
 
+<br />
+<br />  
+<br />  
+  
+And here's what it looks like if we scale, then rotate, then translate (TRS):
+
+$$ \begin{bmatrix} 1 && 0 && 3 \\\ 0 && 1 && 3 \\\ 0 && 0 && 1 \end{bmatrix}
+\begin{bmatrix} \cos\frac{\pi}{4} && -\sin\frac{\pi}{4} && 0 \\\ \sin\frac{\pi}{4} && \cos\frac{\pi}{4} && 0 \\\ 0 && 0 && 1 \end{bmatrix}
+\begin{bmatrix} 1.5 && 0 && 0 \\\ 0 && 2 && 0 \\\ 0 && 0 && 1 \end{bmatrix}
+\begin{bmatrix} x \\\ y \\\ 1 \end{bmatrix} =
+\begin{bmatrix} \frac{1.5}{\sqrt{2}}x - y\sqrt{2} + 3 \\\ \frac{1.5}{\sqrt{2}}x + y\sqrt{2} + 3 \\\ 1 \end{bmatrix} $$
+  
 <img src="TRS.gif" />
+  
+Which looks more like the result you'd expect?
   
 </details>
 
