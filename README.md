@@ -363,7 +363,7 @@ Camera space is what you learned about in part 2 of this lab. It is the coordina
 
 ### 3.3 Object Space
 
-Object space is pretty much what it sounds like - the coordinate system defined by a specific object. In the demo, these are represented by the little sets of axes drawn for each object in the scene.
+Object space is pretty much what it sounds like - the coordinate system in which an object is defined. In the demo, these are represented by the little sets of axes drawn for each object in the scene.
 
 Why do we need coordinates specific to each object? For example, you might want to make a bunch of variations of a sphere that are all different sizes and in different locations. Rather than define each sphere separately, we can define a single sphere as a set of points around an origin, and then transform those points. You can perform calculations on points in the sphere relative to its own central origin, and then use its transformation matrix to get those points in world space.
 
