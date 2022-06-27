@@ -4,30 +4,34 @@
 
 ## 0. Intro
 
-The purpose of this lab is to help you get more comfortable with 2D and 3D transformations and coordinate spaces. Through this lab we want you to understand how to construct transformation matrices and apply them to modify objects in your scene as well as to move between the different coordinate spaces used in building your raytracer.
+The purpose of this lab is to help you get more comfortable with 2D and 3D transformations and coordinate spaces. Through this lab we want you to understand how to construct transformation matrices and apply them to modify objects in your scene. You will also use transformations to move between the different coordinate spaces used in building your raytracer.
 
 During this lab you will learn how to:
 
-1. Construct individual matrices that represent scaling, rotating, and translating transformations.
-2. Combine multiple matrices to calculate a cumulative transformation matrix.
-3. Construct a view matrix.
-4. Use model and view matrices to transition between object space, world space, and camera space.
+1. Construct individual matrices that represent **scaling**, **rotating**, and **translating** transformations.
+2. Compose multiple transformations to obtain a cumulative transformation.
+3. Construct a view matrix representing a specific camera transformation.
+4. Use **model** and **view** matrices to transition between **object space**, **world space**, and **camera space**.
 
 ## 1. Constructing Transformations
 
 ### 1.1 Representing Transformations as Matrices
 
-A transformation can be thought of like a function. Given an input vertex $v$, we can apply a linear transformation $T$ to produce a new output vertex $T(v)=v'$. Linear transformations are one-to-one, with each input vertex only having one transformed output, so we can represent this transformation $T$ as a matrix $M$. Applying the transformation is just multiplying $v$ by the transformation matrix: $Mv=v'$.
+A transformation can be thought of as a function.
+
+Given an input vertex $v$, we can apply a linear transformation $T$ to produce a new output vertex $T(v)=v'$. Linear transformations are one-to-one, with each input vertex only having one transformed output, so we can represent this transformation $T$ as a matrix $M$. Applying the transformation is just multiplying $v$ by the transformation matrix: $Mv=v'$.
 
 Therefore, we can represent our transformation as such in 2D:
 
 $$ T(v) = Mv = \begin{bmatrix} a && b \\\ c && d \end{bmatrix} \begin{bmatrix} x \\\ y \end{bmatrix} = \begin{bmatrix} ax + by \\\ cx + dy \end{bmatrix} = \begin{bmatrix} x' \\\ y' \end{bmatrix} = v' $$
 
+**IMAGE: primer for transformations**
+
 Similarly in 3D:
 
 $$ T(v) = Mv = \begin{bmatrix} a && b && c \\\ d && e && f \\\ g && h && i \end{bmatrix} \begin{bmatrix} x \\\ y \\\ z \end{bmatrix} = \begin{bmatrix} ax + by + cz \\\ dx + ey + fz \\\ gx + hy + iz \end{bmatrix} = \begin{bmatrix} x' \\\ y' \\\ z' \end{bmatrix} = v' $$
 
-> Keep in mind that this is only a limited representation of transformations! As we will see later on, we will need to expand our definition of the transformation matrix to be able to accommodate all of the types of transformations we want to use.
+> Keep in mind that this is only a limited representation of transformations! As we will see later on, we will need to expand our definition of a transformation matrix to be able to accommodate all of the types of transformations we want to use.
 
 Like any one-to-one function, we can reverse a transformation by multiplying by the inverse of the associated matrix.
 
@@ -86,29 +90,36 @@ $$ \begin{bmatrix} \cos\theta && -\sin\theta \\\ \sin\theta && \cos\theta \end{b
 
 **IMAGE: show a square of 4 points rotated in 2D**
 
-In 3D, this is a bit more complex. Rather than always rotating about the origin in a fixed and consistent way, 3D allows for rotation around any arbitrary axis. There are many ways to handle this (as covered during the lectures), but for now we'll use the axis-aligned **Euler angles** approach as this is the simplest for constructing your own matrices. For this, we define the rotation about each standard axis independently, and then combine them. We use $R_n$ to notate the rotation matrix about the $n$-axis.
+In 3D, this is a bit more complex. Rather than always rotating about the origin in a fixed and consistent way, 3D allows for rotation around any arbitrary axis. There are many ways to handle this (as covered during the lectures), but for now we'll use the axis-aligned **Euler angles** approach as this is the simplest for constructing your own matrices. For this, we define the rotation about each standard axis independently, and then compose them. We use $R_n$ to notate the rotation matrix about the $n$-axis.
 
-$$ R_x = \begin{bmatrix} 1 && 0 && 0 \\\ 0 && \cos\theta && \sin\theta \\\ 0 && -\sin\theta && \cos\theta \end{bmatrix},
-R_y = \begin{bmatrix} \cos\theta && 0 && -\sin\theta \\\ 0 && 1 && 0 \\\ \sin\theta && 0 && \cos\theta \end{bmatrix},
-R_z = \begin{bmatrix} \cos\theta && \sin\theta && 0 \\\ -\sin\theta && \cos\theta && 0 \\\ 0 && 0 && 1 \end{bmatrix} $$
+$$ R_x = \begin{bmatrix} 1 && 0 && 0 \\\ 0 && \cos\theta && \sin\theta \\\ 0 && -\sin\theta && \cos\theta \end{bmatrix} $$
 
-When you want to rotate about multiple axes, you have to combine multiple of these individual transformations. We'll discuss the composition of transformations a bit more later, but just keep in mind that there are different orders in which you can apply the rotations. One common standard is to do the $x$-axis first, then the $y$-axis, then the $z$-axis.
+$$ R_y = \begin{bmatrix} \cos\theta && 0 && -\sin\theta \\\ 0 && 1 && 0 \\\ \sin\theta && 0 && \cos\theta \end{bmatrix} $$
+
+$$ R_z = \begin{bmatrix} \cos\theta && \sin\theta && 0 \\\ -\sin\theta && \cos\theta && 0 \\\ 0 && 0 && 1 \end{bmatrix} $$
+
+When you want to rotate about multiple axes, you have to compose multiple of these individual transformations. We'll discuss the composition of transformations a bit more later, but just keep in mind that there are different orders in which you can apply the rotations. One common standard is to do the $x$-axis first, then the $y$-axis, then the $z$-axis.
+
+$$ combined = R_z R_y R_x $$
 
 ### 1.4 Translation
 
-Translation is where our previous understanding of transformation matrices stops working. Until now, we have only been working with **linear transformations**. These transformations always preserve the origin, meaning that multiplying the corresponding transformation matrix by $\begin{bmatrix} 0 \\\ 0 \end{bmatrix}$ will always produce the same point.
+Translation is where our previous understanding of transformation matrices stops working. Until now, we have only been working with **linear transformations**. These transformations always preserve the origin, meaning that multiplying the corresponding transformation matrix by $\begin{bmatrix} 0 \\\ 0 \end{bmatrix}$ will always produce the same point,
+$\begin{bmatrix} 0 \\\ 0 \end{bmatrix}$.
 
-Translation, on the other hand, is an **affine transformation**. Unlike linear transformations, affine transformations do not need to preserve the origin. All linear transformations are affine transformations, but some affine transformations are not linear like translation.
+Translation, on the other hand, is an **[affine transformation](https://en.wikipedia.org/wiki/Affine_transformation)**. Unlike linear transformations, affine transformations do not need to preserve the origin. All linear transformations are affine transformations, but some affine transformations are not linear like translation.
 
-This affects our representation of transformations as matrices because a 2x2 matrix is no longer sufficient for transforming a 2x1 point in this way.
+**IMAGE: venn diagram of transformation types**
+
+This affects our representation of transformations as matrices because a 2x2 matrix is no longer sufficient for transforming a 2x1 point in this way.\:
 
 $$ \begin{bmatrix} a && b \\\ c && d \end{bmatrix} \begin{bmatrix} 0 \\\ 0 \end{bmatrix} = \begin{bmatrix} 0a + 0b \\\ 0c + 0d \end{bmatrix} = \begin{bmatrix} 0 \\\ 0 \end{bmatrix} $$
 
-As you can see here, there is no possible 2x2 matrix that could translate the 2x1 origin. To represent our desired non-linear transformation as a matrix, we introduce **homogeneous coordinates**.
+As you can see, there is no possible 2x2 matrix that could translate the 2x1 origin. No matter what values we fill in the matrix, they will be multiplied by 0 when transforming the origin, resulting in the same point $\begin{bmatrix} 0 \\\ 0 \end{bmatrix}$ limiting us to strictly linear transformations. To represent our desired non-linear transformation as a matrix, we introduce **homogeneous coordinates**.
 
 #### 1.4.1 Homogeneous Coordinates
 
-For our purposes, homogeneous coordinates are pretty simple to use. The idea is that we take our existing point or vector and just add another dimension. By convention we refer to this new coordinate as $w$. For points, $w=1$ and for vectors $w=0$.
+Homogeneous coordinates are pretty simple to _use_, though they might be difficult to understand. The idea is that we take our existing point or vector and just add another dimension. By convention we refer to this new coordinate as $w$. For points, $w=1$ and for vectors $w=0$.
 
 So in 2D, points become $\begin{bmatrix} x \\\ y \\\ 1 \end{bmatrix}$ and vectors become
 $\begin{bmatrix} x \\\ y \\\ 0 \end{bmatrix}$.
@@ -116,7 +127,12 @@ $\begin{bmatrix} x \\\ y \\\ 0 \end{bmatrix}$.
 In 3D we use $\begin{bmatrix} x \\\ y \\\ z \\\ 1 \end{bmatrix}$ and
 $\begin{bmatrix} x \\\ y \\\ z \\\ 0 \end{bmatrix}$.
 
-Now, we can also enlarge our transformation matrix. In 2D, our matrix becomes 3x3 and in 3D, it becomes 4x4.
+Correspondingly, we must also enlarge our transformation matrix. In 2D, our matrix becomes 3x3 and in 3D, it becomes 4x4.
+
+<details>
+<summary>A refresher on points vs. vectors</summary>
+<b>TODO</b>
+</details>
 
 <details>
 <summary>How does this affect what we've learned so far?</summary>
@@ -150,13 +166,17 @@ $$ \begin{bmatrix} 1 && 0 && 0 && d_x \\\ 0 && 1 && 0 && d_y \\\ 0 && 0 && 1 && 
 \begin{bmatrix} x \\\ y \\\ z \\\ 1 \end{bmatrix} = 
 \begin{bmatrix} x + d_x \\\ y + d_y \\\ z + d_z \\\ 1 \end{bmatrix} $$
 
-See how adding the $w$ coordinate allows us to apply the translation using matrix multiplication? Additionally, translation works here on a point because $w=1$. If we try to translate a vector we will just end up with the same thing because vectors don't have a location:
+See how adding the $w$ coordinate allows us to apply the translation using matrix multiplication? Additionally, translation works here on a point because $w=1$. We don't want vectors to be translated because they don't have a location. Vectors represent the difference between two points, defined by having a length and a direction. Neither of these attributes should change with translation, because shifting two points maintains the same displacement between them.
+
+**IMAGE: two points with a vector in between translated**
+
+Homogeneous coordinates account for this difference between how points and vectors should be transformed. Since $w=0$ for vectors, if we try to translate a vector, we will just end up with the same vector because the translation coordinates are placed in the last column of the matrix which gets multiplied by the $w$ coordinate of the vector:
 
 $$ \begin{bmatrix} 1 && 0 && 0 && d_x \\\ 0 && 1 && 0 && d_y \\\ 0 && 0 && 1 && d_z \\\ 0 && 0 && 0 && 1 \end{bmatrix}
 \begin{bmatrix} x \\\ y \\\ z \\\ 0 \end{bmatrix} = 
 \begin{bmatrix} x \\\ y \\\ z \\\ 0 \end{bmatrix} $$
 
-### 1.5 Applying Multiple Transformations
+## 2. Applying Multiple Transformations
 
 As briefly mentioned when discussing rotation about multiple axes, sometimes we want to apply multiple transformations to the same point. We can do this by composing transformations. Mathematically this is represented by multiplying the respective matrices in the order that the transformations are applied. If we have two transformations $T_1$ and $T_2$ represented by matrices $M_1$ and $M_2$, then $T_2(T_1(v)) = M_2(M_1v)$. Here $T_1$ is applied first, making $M_1$ the innermost matrix that $v$ is multiplied by first.
 
@@ -212,7 +232,7 @@ In the stencil code for the lab you should find `insertFileNameHere.cpp` with fu
 
 **NOTE: Idea of demo is to have display of a “scene” with a marked coordinate system for the world and little axes to represent different objects and the camera. By pressing buttons that apply transformations they code, the little “you” indicator will move and be transformed and applying the transformations correctly will move the axes to match the different objects and camera.**
 
-**Task 2: Combining Transformations**
+**Task 2: Composing Transformations**
 
 Great! Now we have some basic transformations created.
 
@@ -226,11 +246,18 @@ Using the graph **fill in functions `getObject1Matrix`, `getObject2Matrix`, and 
 
 **TODO: as demo is developed insert more specific instructions here for viewing**
 
+In the last task, you created the transformation matrices that take objects and transform them to different placements in the world. Just like every other object in a scene, we can represent a camera's position and rotation with a transformation matrix.
+
 ## 2. Camera View Matrix
 
-In the last task, you created the transformation matrices that take objects and transform them to different placements in the world. Just like anything else we place in a scene, we can represent the camera's location and orientation with a transformation matrix.
-
 A key part of rendering is being able to figure out where points in the world are relative to the camera's view. To do this, we can use a transformation matrix that represents the transformation of the camera to the origin of the world. By applying this transformation to points in the world, we can convert them to coordinates that treat the camera like an origin from which it views everything else. We refer to this matrix that transforms into the camera’s space as the **view matrix**.
+
+**IMAGE: View matrix transformation**
+
+<details>
+<summary>Why do we want to do this?</summary>
+<b>TODO</b>
+</details>
 
 The camera is defined by its position P and two vectors **look** and **up** which indicate the orientation.
 
@@ -242,6 +269,8 @@ $$ M_{translate} = \begin{bmatrix} 1 && 0 && 0 && P_x \\\ 0 && 1 && 0 && P_y \\\
 The rotation of the camera is fixed by the look and up vectors, look being the direction the camera points and up being the vertical direction relative to the camera's view. 
 
 ![](camera.png)
+
+**TODO: replace this image. ^^taken from lectures so should probably be replaced in lecture slides as well if confusing**
 
 Recall from the lecture that we can use these to calculate axes $u$, $v$, and $w$ of the camera's coordinate system using the following formulas:
 
@@ -255,12 +284,12 @@ For the rotation component of the view matrix, we want to send the $u$, $v$, and
 
 $$ M_{rotate} = \begin{bmatrix} u_x && u_y && u_z && 0 \\\ v_x && v_y && v_z && 0 \\\ w_x && w_y && w_z && 0 \\\ 0 && 0 && 0 && 1 \end{bmatrix} $$
 
-Finally, putting the rotation and translation together, we get one matrix for transforming into the camera's coordinate system.
+Finally, putting the rotation and translation together, we get one matrix for transforming other objects into the camera's coordinate system.
 
 $$M_{rotate}M_{translate}$$
 
 <details>
-<summary>Wait, how did we get the order?</summary>
+<summary>Wait, why T then R?</summary>
   
 Wondering why our view matrix does translation first and then rotation, even though earlier we said rotation should usually come first?
 
@@ -284,11 +313,11 @@ Here we'll cover the main coordinate spaces you will need to work with.
 
 ### 3.1 World Space
 
-Think of world space as your default overarching coordinate system. Everything else gets placed into the scene relative to the origin and units of the world's coordinate system. In the transformation graph we've been looking at, it is the root that everything else stems from.
+Think of world space as your default overarching coordinate system. Everything else gets placed into the scene relative to the origin and units of the world's coordinate system. World space is arbitrarily defined and acts as a fixed space within which everything else can be defined. In the transformation graph we've been looking at, it is the root that everything else stems from.
 
 ### 3.2 Camera Space
 
-Camera space is what you learned about in part 2 of this lab. It is the coordinate system defined by the camera's position and orientation. In camera space, everything else in the world is relative to the camera's view. In part 2, we went over how to get the view  matrix, which takes world space points and transforms them into camera space.
+Camera space is what you learned about in part 2 of this lab. It is the coordinate system defined by the camera's position and rotation. In camera space, everything else in the world is relative to the camera's view, with the camera being placed at the origin, and its $uvw$ axes becoming the $xyz$. In part 2, we went over how to get the view  matrix, which takes world space points and transforms them into camera space.
 
 ### 3.3 Object Space
 
