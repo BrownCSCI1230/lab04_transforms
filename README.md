@@ -25,8 +25,6 @@ Therefore, we can represent our transformation as such in 2D:
 
 $$ T(v) = Mv = \begin{bmatrix} a && b \\\ c && d \end{bmatrix} \begin{bmatrix} x \\\ y \end{bmatrix} = \begin{bmatrix} ax + by \\\ cx + dy \end{bmatrix} = \begin{bmatrix} x' \\\ y' \end{bmatrix} = v' $$
 
-**IMAGE: primer for transformations**
-
 Similarly in 3D:
 
 $$ T(v) = Mv = \begin{bmatrix} a && b && c \\\ d && e && f \\\ g && h && i \end{bmatrix} \begin{bmatrix} x \\\ y \\\ z \end{bmatrix} = \begin{bmatrix} ax + by + cz \\\ dx + ey + fz \\\ gx + hy + iz \end{bmatrix} = \begin{bmatrix} x' \\\ y' \\\ z' \end{bmatrix} = v' $$
@@ -202,16 +200,16 @@ $$ T_2(T_1(v)) = M_2(M_1v) = (M_2M_1)v = Mv $$
 
 > Note that matrix multiplication is **not commutative** and therefore the order you apply transformations does change the outcome! The product $M_2M_1$ may not be the same as $M_1M_2$. This is particularly the case when translations are involved because scaling and rotation occur relative to the world origin and not the object itself.
 
+One way to prevent this from causing problems in your own code is to use a standardized order in which you apply transformations to maintain consistency. One common method is **TRSv** where first the point is scaled, then rotated, _then_ translated after the first two transformations occur at the origin.
+
 <details>
 <summary>How does this change the outcome?</summary>
   
-<b>IMAGE: SRT order</b>
-  
-<b>IMAGE: TRS order</b>
+<img src="SRT.gif" />
+
+<img src="TRS.gif" />
   
 </details>
-
-One way to prevent this from causing problems in your own code is to use a standardized order in which you apply transformations to maintain consistency. One common method is **TRSv** where first the point is scaled, then rotated, _then_ translated after the first two transformations occur at the origin.
 
 **Task 1: Making Individual Transformation Matrices**
 
