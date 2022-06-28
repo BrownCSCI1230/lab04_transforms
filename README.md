@@ -19,6 +19,11 @@ During this lab you will learn how to:
 
 A transformation can be thought of as a function.
 
+<p align="center">
+  <img src="transformintro.png" width="500" />
+  <p align="center"><b>Figure 1:</b> Transformations take inputs and return transformed outputs </p>
+</p>
+
 Given an input vertex $v$, we can apply a linear transformation $T$ to produce a new output vertex $T(v)=v'$. Linear transformations are one-to-one, with each input vertex only having one transformed output, so we can represent this transformation $T$ as a matrix $M$. Applying the transformation is just multiplying $v$ by the transformation matrix: $Mv=v'$.
 
 Therefore, we can represent our transformation as such in 2D:
@@ -39,15 +44,15 @@ $$ v = M^{-1}v' $$
 
 ### 1.2 Scaling
 
-We learned about a few common transformations in class, the simplest being scaling. To scale $x$ by $s_x$ and $y$ by $s_y$, we want to transform our standard basis vectors $e_1 = \begin{bmatrix} 1 \\\ 0 \end{bmatrix}$ and $e_2 = \begin{bmatrix} 0 \\\ 1 \end{bmatrix}$ into 
-$\begin{bmatrix} s_x \\\ 0 \end{bmatrix}$ and $\begin{bmatrix} 0 \\\ s_y \end{bmatrix}$.
+We learned about a few common transformations in class, the simplest being scaling. To scale $x$ by $s_x$ and $y$ by $s_y$, we want to take our standard basis vectors $e_1 = \begin{bmatrix} 1 \\\ 0 \end{bmatrix}$ and $e_2 = \begin{bmatrix} 0 \\\ 1 \end{bmatrix}$ and scale each by the corresponding factor. $e_1$ is the unit vector in the $x$ direction so it gets multiplied by $s_x$ becoming 
+$\begin{bmatrix} s_x \\\ 0 \end{bmatrix}$
+and $e_2$ multiplied by $s_y$ becomes
+$\begin{bmatrix} 0 \\\ s_y \end{bmatrix}$.
 
-<details>
+<!-- <details>
 <summary>A refresher on basis vectors</summary>
-  
-<b>TODO: make this description better. Cut down to just what is essential for transformations. Maybe even cut out whole mention of bases entirely and try to explain without diving too deep into linalg</b>
 
-If you’ve taken linear algebra before you might be familiar with basis vectors. If not, here’s the basis of it. Ha. Haha.
+If you’ve taken linear algebra before you might be familiar with basis vectors. If not, here’s the <em>basis</em> of it. Ha. Haha.
 
 Think about our regular 3D coordinate system. We can define any point using a set of units along each axis to the position (x, y, z). If we think of our axes as being lines defined by 3 unit length vectors, then our coordinates are just the factors by which we multiply each of those unit vectors by, then sum, to get the resulting position. 
 
@@ -56,11 +61,11 @@ Think about our regular 3D coordinate system. We can define any point using a se
 The basis vectors are the vectors that define a coordinate system. Our standard basis are these unit vectors that define our default axes: $\begin{bmatrix} 1 \\\ 0 \\\ 0 \end{bmatrix}$,
 $\begin{bmatrix} 0 \\\ 1 \\\ 0 \end{bmatrix}$, and $\begin{bmatrix} 0 \\\ 0 \\\ 1 \end{bmatrix}$. When we multiply our transformation matrices, we transform these basis vectors to a new basis that defines a new coordinate system (more on different coordinates later in the lab).
 
-What’s important to take away from all of this is that knowing how the standard basis vectors should end up being transformed makes it very easy to construct the transformation matrix. <b>In between step here.</b> Our transformation matrix is just made up of our new basis vectors as columns.
+What’s important to take away from all of this is that knowing how the standard basis vectors should end up being transformed makes it very easy to construct the transformation matrix. Our transformation matrix is just made up of our new basis vectors as columns.
 
-</details>
+</details> -->
 
-We can construct the transformation matrix using these basis vectors to apply the transformation as such
+We can construct the transformation matrix using the transformed basis vectors as the columns as such:
 
 $$ \begin{bmatrix} s_x && 0 \\\ 0 && s_y \end{bmatrix}
 \begin{bmatrix} x \\\ y \end{bmatrix} =
@@ -74,13 +79,15 @@ $$ \begin{bmatrix} s_x && 0 && 0 \\\ 0 && s_y && 0 \\\ 0 && 0 && s_z \end{bmatri
 \begin{bmatrix} s_xx + 0y + 0z \\\ 0x + s_yy + 0z \\\ 0x + 0y + s_zz \end{bmatrix} =
 \begin{bmatrix} s_xx \\\ s_yy \\\ s_zz \end{bmatrix} $$
 
-![](scaling.gif)
+<p align="center">
+  <img src="scaling.gif" width="500" />
+  <p align="center"><b>Figure 2:</b> An example of scaling using the transformation below</p>
+</p>
 
 $$ \begin{bmatrix} 2 && 0 \\\ 0 && 2 \end{bmatrix}
 \begin{bmatrix} x \\\ y \end{bmatrix} =
 \begin{bmatrix} s_xx + 0y \\\ 0x + s_yy \end{bmatrix} =
 \begin{bmatrix} 2x \\\ 2y \end{bmatrix} $$
-
 
 ### 1.3 Rotation
 
@@ -92,7 +99,10 @@ $$ \begin{bmatrix} \cos\theta && -\sin\theta \\\ \sin\theta && \cos\theta \end{b
 \begin{bmatrix} x \\\ y \end{bmatrix} =
 \begin{bmatrix} x\cos\theta - y\sin\theta \\\ x\sin\theta + y\cos\theta \end{bmatrix} $$
 
-![](rotating.gif)
+<p align="center">
+  <img src="rotating.gif" width="500" />
+  <p align="center"><b>Figure 3:</b> An example of rotation using the transformation below</p>
+</p>
 
 $$ \begin{bmatrix} \cos\frac{\pi}{6} && -\sin\frac{\pi}{6} \\\ \sin\frac{\pi}{6} && \cos\frac{\pi}{6} \end{bmatrix}
 \begin{bmatrix} x \\\ y \end{bmatrix} =
@@ -117,7 +127,10 @@ $\begin{bmatrix} 0 \\\ 0 \end{bmatrix}$.
 
 Translation, on the other hand, is an **[affine transformation](https://en.wikipedia.org/wiki/Affine_transformation)**. Unlike linear transformations, affine transformations do not need to preserve the origin. All linear transformations are affine transformations, but some affine transformations are not linear like translation.
 
-![](transformtypes.png)
+<p align="center">
+  <img src="transformtypes.gif" width="500" />
+  <p align="center"><b>Figure 4:</b> Types of transformations</p>
+</p>
 
 This affects our representation of transformations as matrices because a 2x2 matrix is no longer sufficient for transforming a 2x1 point in this way.\:
 
@@ -176,7 +189,10 @@ $$ \begin{bmatrix} 1 && 0 && 0 && d_x \\\ 0 && 1 && 0 && d_y \\\ 0 && 0 && 1 && 
 
 See how adding the $w$ coordinate allows us to apply the translation using matrix multiplication? Additionally, translation works here on a point because $w=1$. We don't want vectors to be translated because they don't have a location. Vectors represent the difference between two points, defined by having a length and a direction. Neither of these attributes should change with translation, because shifting two points maintains the same displacement between them.
 
-![](vectortranslation.png)
+<p align="center">
+  <img src="vectortranslation.png" width="500" />
+  <p align="center"><b>Figure 5:</b> Translating two points versus translating a vector</p>
+</p>
 
 Homogeneous coordinates account for this difference between how points and vectors should be transformed. Since $w=0$ for vectors, if we try to translate a vector, we will just end up with the same vector because the translation coordinates are placed in the last column of the matrix which gets multiplied by the $w$ coordinate of the vector:
 
@@ -184,7 +200,10 @@ $$ \begin{bmatrix} 1 && 0 && 0 && d_x \\\ 0 && 1 && 0 && d_y \\\ 0 && 0 && 1 && 
 \begin{bmatrix} x \\\ y \\\ z \\\ 0 \end{bmatrix} = 
 \begin{bmatrix} x \\\ y \\\ z \\\ 0 \end{bmatrix} $$
 
-![](translating.gif)
+<p align="center">
+  <img src="translating.gif" width="500" />
+  <p align="center"><b>Figure 6:</b> An example of translation using the transformation below</p>
+</p>
 
 $$ \begin{bmatrix} 1 && 0 && 1 \\\ 0 && 1 && 1 \\\ 0 && 0 && 1 \end{bmatrix}
 \begin{bmatrix} x \\\ y \\\ 1 \end{bmatrix}
@@ -219,7 +238,10 @@ $$ \begin{bmatrix} 1.5 && 0 && 0 \\\ 0 && 2 && 0 \\\ 0 && 0 && 1 \end{bmatrix}
 \begin{bmatrix} x \\\ y \\\ 1 \end{bmatrix} =
 \begin{bmatrix} \frac{1.5}{\sqrt{2}}x - \frac{1.5}{\sqrt{2}}y \\\ x\sqrt{2} + y\sqrt{2} + 6\sqrt{2} \\\ 1 \end{bmatrix} $$
   
-<img src="SRT.gif" />
+<p align="center">
+  <img src="SRT.gif" width="500" />
+  <p align="center"><b>Figure 7:</b> An example of an SRT ordered transformation</p>
+</p>
 
 <br />
 <br />  
@@ -233,7 +255,10 @@ $$ \begin{bmatrix} 1 && 0 && 3 \\\ 0 && 1 && 3 \\\ 0 && 0 && 1 \end{bmatrix}
 \begin{bmatrix} x \\\ y \\\ 1 \end{bmatrix} =
 \begin{bmatrix} \frac{1.5}{\sqrt{2}}x - y\sqrt{2} + 3 \\\ \frac{1.5}{\sqrt{2}}x + y\sqrt{2} + 3 \\\ 1 \end{bmatrix} $$
   
-<img src="TRS.gif" />
+<p align="center">
+  <img src="TRS.gif" width="500" />
+  <p align="center"><b>Figure 8:</b> An example of a TRS ordered transformation</p>
+</p>
   
 Which looks more like the result you'd expect?
   
@@ -373,36 +398,11 @@ In task 2 of this lab you have already found some such transformation matrices f
 
 That was a lot of information! Here’s a simpler graphic that helps to sum up the relationships between everything we covered in this lab:
 
-![](spaces.png)
+<p align="center">
+  <img src="spaces.png" width="500" />
+  <p align="center"><b>Figure ??:</b> Relating world, camera, and object space</p>
+</p>
 
 The arrows indicate the direction of transformation that the labeled matrix provides. An object’s model matrix will convert from that object’s space to world space. The view matrix will convert from world space to camera space. The inverses of these matrices provide the transformation of the opposite direction of the arrows, going from camera space to world space or world space to object space.
 
-**Task 4: Moving From Camera Space to Object Space**
-
-Now that we have programmed all of the matrices in our graph, we want to make sure that we can actually traverse the graph and find how points are related across different spaces. If the camera sees a point on a cube, we want to be able to take that point (relative to camera space) and find its position relative to world space or object space.
-
-![](transforms.png)
-
-Using the functions you've completed in tasks 1-3 and the graph above, fill in the function `cameraToObj1` so that it returns a matrix that takes points in camera space and transforms them into Object 1's coordinate space, using the matrices that you’ve constructed during previous tasks. 
-
-<details>
-<summary>Hint!</summary>
-  
-Remember that we don't need to go directly from the camera to the object. There might be an intermediate step here that allows us to use multiple transformations we've already worked with...
-  
-</details>
-
-**Task 5: Moving From Object Space to Camera Space**
-
-Now we want to do the reverse. Fill in `obj2ToCamera` to return a matrix that takes points in Object 2's space and finds them in the camera's space. 
-
-<details>
-<summary>Hint!</summary>
-  
-Think about what we do to a transformation matrix to reverse a transformation. `glm::inverse` might help with this one.
-  
-</details>
-
-**Task 6: Performing Calculations Across Spaces**
-
-**TODO: Another task with something like providing points in two different spaces and asking students to find the distance between the two in world space.**
+**Task ?: TODO Conceptual Question**
