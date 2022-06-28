@@ -136,7 +136,7 @@ $\begin{bmatrix} 0 \\\ 0 \end{bmatrix}$.
 Translation, on the other hand, is an **[affine transformation](https://en.wikipedia.org/wiki/Affine_transformation)**. Unlike linear transformations, affine transformations do not need to preserve the origin. All linear transformations are affine transformations, but some affine transformations are not linear like translation.
 
 <p align="center">
-  <img src="transformtypes.gif" width="500" />
+  <img src="transformtypes.png" width="500" />
   <p align="center"><b>Figure 4:</b> Types of transformations</p>
 </p>
 
