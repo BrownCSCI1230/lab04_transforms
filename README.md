@@ -430,4 +430,8 @@ The arrows indicate the direction of transformation that the labeled matrix prov
 
 |**_Task 8:_**|
 |:---|
-|Fill in `getCameraMatrix` to return the view matrix of the camera using the specifications given in the above graph.|
+|**TODO: conceptual question**|
+
+## 4. Looking Ahead
+
+In this lab you implemented your own functions to build transformation matrices and learned how to create cumulative transformation matrices, which you will continue to work on in the next lab, **Lab 5: Parsing**. Though you wrote the matrices yourself this time, you might find built-in functions such as `glm::scale`, `glm::rotate`, and `glm::translate` to be helpful and save you some time in the future. Be careful though! `glm::rotate` uses the angle-axis representation of rotation.
