@@ -89,6 +89,10 @@ $$ \begin{bmatrix} 2 && 0 \\\ 0 && 2 \end{bmatrix}
 \begin{bmatrix} s_xx + 0y \\\ 0x + s_yy \end{bmatrix} =
 \begin{bmatrix} 2x \\\ 2y \end{bmatrix} $$
 
+|**_Task 1:_**|
+|:---|
+|Fill in `getScalingMatrix` so that it returns the 3x3 transformation matrix (as a `glm::mat3`) that scales along each axis given the 3 scale factors.|
+
 ### 1.3 Rotation
 
 Rotation in 2D follows a similar idea as scaling. We want to take our standard basis vectors and find the transformed basis vectors. Rotating $e_1$ around the origin by
@@ -115,6 +119,10 @@ $$ R_x = \begin{bmatrix} 1 && 0 && 0 \\\ 0 && \cos\theta && \sin\theta \\\ 0 && 
 $$ R_y = \begin{bmatrix} \cos\theta && 0 && -\sin\theta \\\ 0 && 1 && 0 \\\ \sin\theta && 0 && \cos\theta \end{bmatrix} $$
 
 $$ R_z = \begin{bmatrix} \cos\theta && \sin\theta && 0 \\\ -\sin\theta && \cos\theta && 0 \\\ 0 && 0 && 1 \end{bmatrix} $$
+
+|**_Task 2:_**|
+|:---|
+|Fill in `getRotationMatrixX`, `getRotationMatrixY`, and `getRotationMatrixZ` so that each returns the 3x3 transformation matrix that rotates about the named axis by the given angle. [These functions](https://glm.g-truc.net/0.9.4/api/a00136.html) might be useful.|
 
 When you want to rotate about multiple axes, you have to compose multiple of these individual transformations. We'll discuss the composition of transformations a bit more later, but just keep in mind that there are different orders in which you can apply the rotations. One common standard is to do the $x$-axis first, then the $y$-axis, then the $z$-axis.
 
@@ -152,7 +160,11 @@ Correspondingly, we must also enlarge our transformation matrix. In 2D, our matr
 
 <details>
 <summary>A refresher on points vs. vectors</summary>
-<b>TODO</b>
+  A <b>point</b> is characterized by having a specific position in space.
+
+  A <b>vector</b> has a magnitude and a direction, but no location.
+  
+  One way to think of this mathematically is that a vector is the difference between two points, like the displacement from one to the other. It doesn't matter where it starts and ends. Conversely, points only have a location, but no sense of size or orientation.
 </details>
 
 <details>
@@ -209,6 +221,14 @@ $$ \begin{bmatrix} 1 && 0 && 1 \\\ 0 && 1 && 1 \\\ 0 && 0 && 1 \end{bmatrix}
 \begin{bmatrix} x \\\ y \\\ 1 \end{bmatrix}
 \begin{bmatrix} x + 1 \\\ y + 1 \\\ 1 \end{bmatrix}$$
 
+|**_Task 3:_**|
+|:---|
+|Fill in `getTranslationMatrix` so that each returns the **4x4** transformation matrix (as a **`glm::mat4`**) that translates along each axis by the given coordinates.|
+
+|**_Task 4:_**|
+|:---|
+|You'll need to modify your previous functions so that the matrices they return are compatible with our new homogeneous coordinates. Modify `getScalingMatrix`, `getRotationMatrixX`, `getRotationMatrixY`, and `getRotationMatrixZ` to return a **`glm::mat4`**.|
+
 ## 2. Applying Multiple Transformations
 
 As briefly mentioned when discussing rotation about multiple axes, sometimes we want to apply multiple transformations to the same point. We can do this by composing transformations. Mathematically this is represented by multiplying the respective matrices in the order that the transformations are applied. If we have two transformations $T_1$ and $T_2$ represented by matrices $M_1$ and $M_2$, then $T_2(T_1(v)) = M_2(M_1v)$. Here $T_1$ is applied first, making $M_1$ the innermost matrix that $v$ is multiplied by first.
@@ -217,9 +237,13 @@ Due to the associativity of matrix multiplication, we can multiply $M_2$ and $M_
 
 $$ T_2(T_1(v)) = M_2(M_1v) = (M_2M_1)v = Mv $$
 
-> Note that matrix multiplication is **not commutative** and therefore the order you apply transformations does change the outcome! The product $M_2M_1$ may not be the same as $M_1M_2$. This is particularly the case when translations are involved because scaling and rotation occur relative to the world origin and not the object itself.
+> Note that matrix multiplication is **not commutative** and therefore the order you apply transformations does change the outcome! The product $M_2M_1$ may not be the same as $M_1M_2$.
 
-One way to prevent this from causing problems in your own code is to use a standardized order in which you apply transformations to maintain consistency. One common method is **TRSv** where first the point is scaled, then rotated, _then_ translated after the first two transformations occur at the origin.
+### 2.1 Ordering S, R, and T
+
+If you have one object that you want to apply multiple individual scale, rotation, and translation transformations to, you should be careful of the order in which you compose the transformations. Usually, you want to use a standardized order in which you apply transformations to maintain consistency. 
+
+One common ordering is **TRS**. This means that scaling is first, then rotation, then translation. This is favorable because we scale along the standard axes, so we want to do this before rotating. Rotating first would change the way the object is stretched. Both rotation and scaling are centered at the origin, so we do those before translating.
 
 <details>
 <summary>How does this change the outcome?</summary>
@@ -264,15 +288,13 @@ Which looks more like the result you'd expect?
   
 </details>
 
-**Task 1: Making Individual Transformation Matrices**
+## 2.3 Introducing Our Transformation Graph
 
-Now that we've learned how to create a few basic types of transformation matrices, it's time for you to try filling in a few of them for yourself! Throughout the lab we will be referring to this graph:
-
-**NOTE: Might need to change the values after demo is made**
+For the next part of the lab we'll be looking at this graph which explains the transformations we want to create for the lab demo.
 
 ![](transforms.png)
 
-You might notice this looks a bit like a modified version of the scene graphs discussed in class. We'll take a closer look at understanding the graph structure later in the lab and in the next lab, but for now let's focus on some of the labeled transformations.
+You might notice this looks a bit like a modified version of the scene graphs discussed in class. We'll take a closer look at understanding the graph structure later in the lab and in the next lab, but for now let's focus on some of the labeled transformations. A, B, C, and D all denote individual cumulative transformation matrices that involve some combination of scaling, rotating, and translating.
 
 <details>
 <summary>How to read the transformations</summary>
@@ -283,35 +305,35 @@ Here’s a guide to our notation of transformations:
 
 ```
 S X,Y,Z: scale by factors X, Y, and Z along the corresponding axes
-R X,Y,Z,𝜃: rotate by angle 𝜃 about the axis defined by unit vector (X,Y,Z)
+R X,Y,Z,𝜃: rotate by angle 𝜃 about the axis defined by unit vector [X,Y,Z] ([1, 0, 0] would denote the x-axis, for example)
 T X,Y,Z: translate by X, Y, and Z along the corresponding axes
 ```
 
 </details>
 
-Using our transformation building blocks to make more complex transformations, we can use any combination of these to place objects in our 3D scene. In practice, when we say "objects" we mean some defined set of points to which we can apply transformations, like the shapes that you will be rendering in your future projects. For now, the demo just visually represents them as a set of axes to indicate the location, orientation, and scale in the world.
+|**_Task 5:_**|
+|:---|
+|Fill in functions `getMatrixA`, `getMatrixB`, `getMatrixC`, and `getMatrixD` using the functions you defined in Tasks 1-4 to return the matrices corresponding to the transformations described in the graph.|
 
-In the stencil code for the lab you should find `insertFileNameHere.cpp` with functions `getMatrixA`, `getMatrixB`, and `getMatrixC`. Each of these functions is used by our program to get transformation matrices A, B, and C as they are described in the graph. **Complete the functions using what we learned about scaling, rotation, and translation** so that they return the correct `glm::mat4` matrices.
+Great! Now we have matrices corresponding to each edge of the graph. But what does it mean to have multiple of these branching off into different layers of the graph's hierarchy?
+
+### 2.2 Nesting Transformations
+
+![](transforms.png)
+
+Looking at our graph again, each leaf of the tree is an object in the scene. Traversing the tree from the object to the root will create a path through all of the transformations applied to that object in the scene. So to transform Object 1 to world space, for example, first apply transformation A then C. The cumulative transformation matrix of an object in the scene, resulting from this ordered multiplication of matrices, is referred to as the object’s **model matrix**. 
+
+Previously, we emphasized the need to order each of our T, R, and S transformations. Now we may be dealing with multiple matrices that are already composed of their own individual transformations. Here, the graph hierarchy is what decides the final ordering of the cumulative matrix.
+
+|**_Task 6:_**|
+|:---|
+|Fill in functions `getObject1Matrix`, `getObject2Matrix`, and `getObject3Matrix` so that they correctly return the model matrices of the objects in the graph using the functions you defined in Task 5.|
 
 ![](demoplaceholder.png)
 
 **TODO: as demo is developed insert more specific instructions here for viewing**
 
 **NOTE: Idea of demo is to have display of a “scene” with a marked coordinate system for the world and little axes to represent different objects and the camera. By pressing buttons that apply transformations they code, the little “you” indicator will move and be transformed and applying the transformations correctly will move the axes to match the different objects and camera.**
-
-**Task 2: Composing Transformations**
-
-Great! Now we have some basic transformations created.
-
-![](transforms.png)
-
-Looking at our graph again, each leaf of the tree is an object in the scene. Traversing the tree from the object to the root will create a path through all of the transformations applied to that object in the scene. So to transform Object 1 to world space, for example, first apply transformation A then C. The cumulative transformation matrix of an object in the scene, resulting from this ordered multiplication of matrices, is referred to as the object’s **model matrix**.
-
-Using the graph **fill in functions `getObject1Matrix`, `getObject2Matrix`, and `getObject3Matrix` in the stencil code** with the model matrix of each object. For Object 3, note that there is no specified hierarchy in which the multiple transformations are applied so you should consider how to best order them so that the final result is positioned as desired.
-
-> For Objects 1 and 2, you might want to make use of the functions you wrote in task 1. For any new transformation matrices you might need, feel free to make use of glm's built in functions such `glm::scale`, `glm::rotate`, and `glm::translate`.
-
-**TODO: as demo is developed insert more specific instructions here for viewing**
 
 In the last task, you created the transformation matrices that take objects and transform them to different placements in the world. Just like every other object in a scene, we can represent a camera's position and rotation with a transformation matrix.
 
@@ -366,11 +388,11 @@ $$(M_1M_2)^{-1} = M_2^{-1} M_1^{-1}$$
 
 </details>
 
-**Task 3: Building the View Matrix**
-
 ![](transforms.png)
 
-Fill in `getCameraMatrix` to return the view matrix of the camera using the specifications given in the above graph.
+|**_Task 7:_**|
+|:---|
+|Fill in `getCameraMatrix` to return the view matrix of the camera using the specifications given in the above graph.|
 
 ## 3. Coordinate Spaces
 
@@ -405,4 +427,7 @@ That was a lot of information! Here’s a simpler graphic that helps to sum up t
 
 The arrows indicate the direction of transformation that the labeled matrix provides. An object’s model matrix will convert from that object’s space to world space. The view matrix will convert from world space to camera space. The inverses of these matrices provide the transformation of the opposite direction of the arrows, going from camera space to world space or world space to object space.
 
-**Task ?: TODO Conceptual Question**
+
+|**_Task 8:_**|
+|:---|
+|Fill in `getCameraMatrix` to return the view matrix of the camera using the specifications given in the above graph.|
