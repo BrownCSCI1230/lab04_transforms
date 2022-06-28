@@ -288,7 +288,7 @@ Which looks more like the result you'd expect?
   
 </details>
 
-## 2.3 Introducing Our Transformation Graph
+### 2.2 Introducing Our Transformation Graph
 
 For the next part of the lab we'll be looking at this graph which explains the transformations we want to create for the lab demo.
 
@@ -317,7 +317,7 @@ T X,Y,Z: translate by X, Y, and Z along the corresponding axes
 
 Great! Now we have matrices corresponding to each edge of the graph. But what does it mean to have multiple of these branching off into different layers of the graph's hierarchy?
 
-### 2.2 Nesting Transformations
+### 2.3 Nesting Transformations
 
 ![](transforms.png)
 
