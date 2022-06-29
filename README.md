@@ -357,9 +357,10 @@ $$ M_{translate} = \begin{bmatrix} 1 && 0 && 0 && P_x \\\ 0 && 1 && 0 && P_y \\\
 
 The rotation of the camera is fixed by the look and up vectors, look being the direction the camera points and up being the vertical direction relative to the camera's view. 
 
-![](camera.png)
-
-**TODO: replace this image. ^^taken from lectures so should probably be replaced in lecture slides as well if confusing**
+<p align="center">
+  <img src="camaxes.png" width="500" />
+  <p align="center"><b>Figure 9:</b> Camera look and up vectors, uvw axes</p>
+</p>
 
 Recall from the lecture that we can use these to calculate axes $u$, $v$, and $w$ of the camera's coordinate system using the following formulas:
 
@@ -426,7 +427,6 @@ That was a lot of information! Here’s a simpler graphic that helps to sum up t
 </p>
 
 The arrows indicate the direction of transformation that the labeled matrix provides. An object’s model matrix will convert from that object’s space to world space. The view matrix will convert from world space to camera space. The inverses of these matrices provide the transformation of the opposite direction of the arrows, going from camera space to world space or world space to object space.
-
 
 |**_Task 8:_**|
 |:---|
