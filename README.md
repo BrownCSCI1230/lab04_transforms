@@ -341,7 +341,7 @@ In the last task, you created the transformation matrices that take objects and 
 
 A key part of rendering is being able to figure out where points in the world are relative to the camera's view. To do this, we can use a transformation matrix that represents the transformation of the camera to the origin of the world. By applying this transformation to points in the world, we can convert them to coordinates that treat the camera like an origin from which it views everything else. We refer to this matrix that transforms into the camera’s space as the **view matrix**.
 
-**IMAGE: View matrix transformation**
+<img src="viewtransform.png" width="700">
 
 <details>
 <summary>Why do we want to do this?</summary>
