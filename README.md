@@ -341,7 +341,10 @@ In the last task, you created the transformation matrices that take objects and 
 
 A key part of rendering is being able to figure out where points in the world are relative to the camera's view. To do this, we can use a transformation matrix that represents the transformation of the camera to the origin of the world. By applying this transformation to points in the world, we can convert them to coordinates that treat the camera like an origin from which it views everything else. We refer to this matrix that transforms into the camera’s space as the **view matrix**.
 
-<img src="viewtransform.png" width="700">
+<p align="center">
+  <img src="viewtransform.png" width="700" />
+  <p align="center"><b>Figure 9:</b> Transformation from world space to camera space using the view matrix</p>
+</p>
 
 <details>
 <summary>Why do we want to do this?</summary>
@@ -359,7 +362,7 @@ The rotation of the camera is fixed by the look and up vectors, look being the d
 
 <p align="center">
   <img src="camaxes.png" width="500" />
-  <p align="center"><b>Figure 9:</b> Camera look and up vectors, uvw axes</p>
+  <p align="center"><b>Figure 10:</b> Camera look and up vectors, uvw axes</p>
 </p>
 
 Recall from the lecture that we can use these to calculate axes $u$, $v$, and $w$ of the camera's coordinate system using the following formulas:
@@ -423,7 +426,7 @@ That was a lot of information! Here’s a simpler graphic that helps to sum up t
 
 <p align="center">
   <img src="spaces.png" width="500" />
-  <p align="center"><b>Figure ??:</b> Relating world, camera, and object space</p>
+  <p align="center"><b>Figure 11:</b> Relating world, camera, and object space</p>
 </p>
 
 The arrows indicate the direction of transformation that the labeled matrix provides. An object’s model matrix will convert from that object’s space to world space. The view matrix will convert from world space to camera space. The inverses of these matrices provide the transformation of the opposite direction of the arrows, going from camera space to world space or world space to object space.
