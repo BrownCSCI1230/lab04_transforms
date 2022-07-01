@@ -7,14 +7,20 @@ CONFIG += c++20
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    axes.cpp \
     glrenderer.cpp \
+    gridlines.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    transforms.cpp
 
 HEADERS += \
     CS1230Lib/resourceloader.h \
+    axes.h \
     glrenderer.h \
-    mainwindow.h
+    gridlines.h \
+    mainwindow.h \
+    transforms.h
 
 
 # Default rules for deployment.
