@@ -1,5 +1,9 @@
 #include "axes.h"
 
+Axes::Axes() {
+
+}
+
 Axes::Axes(glm::mat4 model, glm::vec3 color)
 {
     m_model = model;

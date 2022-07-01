@@ -6,6 +6,7 @@
 class Axes
 {
 public:
+    Axes();
     Axes(glm::mat4 model, glm::vec3 color);
 
     void applyTransform(glm::mat4 transform);
