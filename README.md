@@ -20,7 +20,7 @@ During this lab you will learn how to:
 A transformation can be thought of as a function.
 
 <p align="center">
-  <img src="transformintro.png" width="500" />
+  <img src="images/transformintro.png" width="500" />
   <p align="center"><b>Figure 1:</b> Transformations take inputs and return transformed outputs </p>
 </p>
 
@@ -56,7 +56,7 @@ If you’ve taken linear algebra before you might be familiar with basis vectors
 
 Think about our regular 3D coordinate system. We can define any point using a set of units along each axis to the position (x, y, z). If we think of our axes as being lines defined by 3 unit length vectors, then our coordinates are just the factors by which we multiply each of those unit vectors by, then sum, to get the resulting position. 
 
-![](basis.png)
+![](images/basis.png)
 
 The basis vectors are the vectors that define a coordinate system. Our standard basis are these unit vectors that define our default axes: $\begin{bmatrix} 1 \\\ 0 \\\ 0 \end{bmatrix}$,
 $\begin{bmatrix} 0 \\\ 1 \\\ 0 \end{bmatrix}$, and $\begin{bmatrix} 0 \\\ 0 \\\ 1 \end{bmatrix}$. When we multiply our transformation matrices, we transform these basis vectors to a new basis that defines a new coordinate system (more on different coordinates later in the lab).
@@ -80,7 +80,7 @@ $$ \begin{bmatrix} s_x && 0 && 0 \\\ 0 && s_y && 0 \\\ 0 && 0 && s_z \end{bmatri
 \begin{bmatrix} s_xx \\\ s_yy \\\ s_zz \end{bmatrix} $$
 
 <p align="center">
-  <img src="scaling.gif" width="500" />
+  <img src="images/scaling.gif" width="500" />
   <p align="center"><b>Figure 2:</b> An example of scaling using the transformation below</p>
 </p>
 
@@ -104,7 +104,7 @@ $$ \begin{bmatrix} \cos\theta && -\sin\theta \\\ \sin\theta && \cos\theta \end{b
 \begin{bmatrix} x\cos\theta - y\sin\theta \\\ x\sin\theta + y\cos\theta \end{bmatrix} $$
 
 <p align="center">
-  <img src="rotating.gif" width="500" />
+  <img src="images/rotating.gif" width="500" />
   <p align="center"><b>Figure 3:</b> An example of rotation using the transformation below</p>
 </p>
 
@@ -136,7 +136,7 @@ $\begin{bmatrix} 0 \\\ 0 \end{bmatrix}$.
 Translation, on the other hand, is an **[affine transformation](https://en.wikipedia.org/wiki/Affine_transformation)**. Unlike linear transformations, affine transformations do not need to preserve the origin. All linear transformations are affine transformations, but some affine transformations are not linear like translation.
 
 <p align="center">
-  <img src="transformtypes.png" width="500" />
+  <img src="images/transformtypes.png" width="500" />
   <p align="center"><b>Figure 4:</b> Types of transformations</p>
 </p>
 
@@ -202,7 +202,7 @@ $$ \begin{bmatrix} 1 && 0 && 0 && d_x \\\ 0 && 1 && 0 && d_y \\\ 0 && 0 && 1 && 
 See how adding the $w$ coordinate allows us to apply the translation using matrix multiplication? Additionally, translation works here on a point because $w=1$. We don't want vectors to be translated because they don't have a location. Vectors represent the difference between two points, defined by having a length and a direction. Neither of these attributes should change with translation, because shifting two points maintains the same displacement between them.
 
 <p align="center">
-  <img src="vectortranslation.png" width="500" />
+  <img src="images/vectortranslation.png" width="500" />
   <p align="center"><b>Figure 5:</b> Translating two points versus translating a vector</p>
 </p>
 
@@ -213,7 +213,7 @@ $$ \begin{bmatrix} 1 && 0 && 0 && d_x \\\ 0 && 1 && 0 && d_y \\\ 0 && 0 && 1 && 
 \begin{bmatrix} x \\\ y \\\ z \\\ 0 \end{bmatrix} $$
 
 <p align="center">
-  <img src="translating.gif" width="500" />
+  <img src="images/translating.gif" width="500" />
   <p align="center"><b>Figure 6:</b> An example of translation using the transformation below</p>
 </p>
 
@@ -263,7 +263,7 @@ $$ \begin{bmatrix} 1.5 && 0 && 0 \\\ 0 && 2 && 0 \\\ 0 && 0 && 1 \end{bmatrix}
 \begin{bmatrix} \frac{1.5}{\sqrt{2}}x - \frac{1.5}{\sqrt{2}}y \\\ x\sqrt{2} + y\sqrt{2} + 6\sqrt{2} \\\ 1 \end{bmatrix} $$
   
 <p align="center">
-  <img src="SRT.gif" width="500" />
+  <img src="images/SRT.gif" width="500" />
   <p align="center"><b>Figure 7:</b> An example of an SRT ordered transformation</p>
 </p>
 
@@ -280,7 +280,7 @@ $$ \begin{bmatrix} 1 && 0 && 3 \\\ 0 && 1 && 3 \\\ 0 && 0 && 1 \end{bmatrix}
 \begin{bmatrix} \frac{1.5}{\sqrt{2}}x - y\sqrt{2} + 3 \\\ \frac{1.5}{\sqrt{2}}x + y\sqrt{2} + 3 \\\ 1 \end{bmatrix} $$
   
 <p align="center">
-  <img src="TRS.gif" width="500" />
+  <img src="images/TRS.gif" width="500" />
   <p align="center"><b>Figure 8:</b> An example of a TRS ordered transformation</p>
 </p>
   
@@ -292,7 +292,7 @@ Which looks more like the result you'd expect?
 
 For the next part of the lab we'll be looking at this graph which explains the transformations we want to create for the lab demo.
 
-![](transforms.png)
+![](images/transforms.png)
 
 You might notice this looks a bit like a modified version of the scene graphs discussed in class. We'll take a closer look at understanding the graph structure later in the lab and in the next lab, but for now let's focus on some of the labeled transformations. A, B, C, and D all denote individual cumulative transformation matrices that involve some combination of scaling, rotating, and translating.
 
@@ -319,7 +319,7 @@ Great! Now we have matrices corresponding to each edge of the graph. But what do
 
 ### 2.3 Nesting Transformations
 
-![](transforms.png)
+![](images/transforms.png)
 
 Looking at our graph again, each leaf of the tree is an object in the scene. Traversing the tree from the object to the root will create a path through all of the transformations applied to that object in the scene. So to transform Object 1 to world space, for example, first apply transformation A then C. The cumulative transformation matrix of an object in the scene, resulting from this ordered multiplication of matrices, is referred to as the object’s **model matrix**. 
 
@@ -329,7 +329,7 @@ Previously, we emphasized the need to order each of our T, R, and S transformati
 |:---|
 |Fill in functions `getObject1Matrix`, `getObject2Matrix`, and `getObject3Matrix` so that they correctly return the model matrices of the objects in the graph using the functions you defined in Task 5.|
 
-![](demoplaceholder.png)
+![](images/demoplaceholder.png)
 
 **TODO: as demo is developed insert more specific instructions here for viewing**
 
@@ -342,7 +342,7 @@ In the last task, you created the transformation matrices that take objects and 
 A key part of rendering is being able to figure out where points in the world are relative to the camera's view. To do this, we can use a transformation matrix that represents the transformation of the camera to the origin of the world. By applying this transformation to points in the world, we can convert them to coordinates that treat the camera like an origin from which it views everything else. We refer to this matrix that transforms into the camera’s space as the **view matrix**.
 
 <p align="center">
-  <img src="viewtransform.png" width="700" />
+  <img src="images/viewtransform.png" width="700" />
   <p align="center"><b>Figure 9:</b> Transformation from world space to camera space using the view matrix</p>
 </p>
 
@@ -361,7 +361,7 @@ $$ M_{translate} = \begin{bmatrix} 1 && 0 && 0 && P_x \\\ 0 && 1 && 0 && P_y \\\
 The rotation of the camera is fixed by the look and up vectors, look being the direction the camera points and up being the vertical direction relative to the camera's view. 
 
 <p align="center">
-  <img src="camaxes.png" width="500" />
+  <img src="images/camaxes.png" width="500" />
   <p align="center"><b>Figure 10:</b> Camera look and up vectors, uvw axes</p>
 </p>
 
@@ -392,7 +392,7 @@ $$(M_1M_2)^{-1} = M_2^{-1} M_1^{-1}$$
 
 </details>
 
-![](transforms.png)
+![](images/transforms.png)
 
 |**_Task 7:_**|
 |:---|
@@ -425,7 +425,7 @@ In task 2 of this lab you have already found some such transformation matrices f
 That was a lot of information! Here’s a simpler graphic that helps to sum up the relationships between everything we covered in this lab:
 
 <p align="center">
-  <img src="spaces.png" width="500" />
+  <img src="images/spaces.png" width="500" />
   <p align="center"><b>Figure 11:</b> Relating world, camera, and object space</p>
 </p>
 
