@@ -32,5 +32,7 @@ INCLUDEPATH += glm
 DEPENDPATH += glm
 
 DISTFILES += \
-    Resources/Shaders/default.frag \
-    Resources/Shaders/default.vert \
+    Resources/Shaders/axes.frag \
+    Resources/Shaders/axes.vert \
+    Resources/Shaders/grid.frag \
+    Resources/Shaders/grid.vert
