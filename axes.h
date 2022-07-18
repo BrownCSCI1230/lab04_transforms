@@ -16,16 +16,17 @@ public:
     Axes(glm::mat4 model, glm::vec3 color);
 
     void applyTransform(glm::mat4 transform);
-
     void init(GLRenderer* context);
     void draw(GLRenderer* context);
 
 private:
-    std::vector<float> lineData;
+    std::vector<float> coneData;
     glm::mat4 m_model;
     glm::vec3 m_color;
-    GLuint m_vbo;
-    GLuint m_vao;
+    GLuint m_axesVbo;
+    GLuint m_axesVao;
+    GLuint m_arrowVbo;
+    GLuint m_arrowVao;
 };
 
 #endif // AXES_H

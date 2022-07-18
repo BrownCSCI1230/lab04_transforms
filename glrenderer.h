@@ -25,6 +25,7 @@ protected:
 private:
     GLuint m_gridshader;    //Stores id for shader program
     GLuint m_axesshader;    //Stores id for shader program
+    GLuint m_arrowshader;   //Stores id for shader program
 
     Axes m_student;
     Axes m_obj1;

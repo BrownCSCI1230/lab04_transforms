@@ -1,6 +1,7 @@
 #include "glrenderer.h"
 
 #include <QCoreApplication>
+#include <QOpenGLShaderProgram>
 #include "CS1230Lib/resourceloader.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/transform.hpp"
@@ -36,6 +37,7 @@ void GLRenderer::initializeGL()
     //load shaders
     m_gridshader = ResourceLoader::createShaderProgram("Resources/Shaders/grid.vert", "Resources/Shaders/grid.frag"); //Shader setup (DO NOT EDIT)
     m_axesshader = ResourceLoader::createShaderProgram("Resources/Shaders/axes.vert", "Resources/Shaders/axes.frag"); //Shader setup (DO NOT EDIT)
+    m_arrowshader = ResourceLoader::createShaderProgram("Resources/Shaders/arrow.vert", "Resources/Shaders/arrow.frag"); //Shader setup (DO NOT EDIT)
 
     //initialize axis objects
     m_obj1 = Axes(glm::mat4(1), glm::vec3(0.9,1,0.9));
@@ -59,42 +61,41 @@ void GLRenderer::paintGL()
     //clear the frame
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    //Set view and projection matricies in all shaders
+    glUseProgram(m_axesshader);
+    glUniformMatrix4fv(glGetUniformLocation(m_axesshader,"view"),
+                       1,GL_FALSE,&m_view[0][0]);
 
-    //Draw Gridlines
+    glUniformMatrix4fv(glGetUniformLocation(m_axesshader,"proj"),
+                       1,GL_FALSE,&m_projection[0][0]);
+    glUseProgram(0);
+
     glUseProgram(m_gridshader);
+    glUniformMatrix4fv(glGetUniformLocation(m_gridshader,"view"),
+                       1,GL_FALSE, &m_view[0][0]);
 
-    glUniformMatrix4fv(glGetUniformLocation(m_gridshader,
-                                            "view"),
-                       1,GL_FALSE,
-                       &m_view[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(m_gridshader,"proj"),
+                       1,GL_FALSE,&m_projection[0][0]);
+    glUseProgram(0);
 
-    glUniformMatrix4fv(glGetUniformLocation(m_gridshader,
-                                            "proj"),
-                       1,GL_FALSE,
-                       &m_projection[0][0]);
+    glUseProgram(m_arrowshader);
+    glUniformMatrix4fv(glGetUniformLocation(m_arrowshader,"view"),
+                       1,GL_FALSE, &m_view[0][0]);
 
-    m_grid.draw(this);
-
+    glUniformMatrix4fv(glGetUniformLocation(m_arrowshader,"proj"),
+                       1,GL_FALSE,&m_projection[0][0]);
     glUseProgram(0);
 
 
+    //Draw Gridlines
+    m_grid.draw(this);
+
     //Draw Axes
-    glUseProgram(m_axesshader);
-
-    glUniformMatrix4fv(glGetUniformLocation(m_axesshader,
-                                            "view"),
-                       1,GL_FALSE,
-                       &m_view[0][0]);
-
-    glUniformMatrix4fv(glGetUniformLocation(m_axesshader,
-                                            "proj"),
-                       1,GL_FALSE,
-                       &m_projection[0][0]);
-
     m_obj1.draw(this);
     m_obj2.draw(this);
 
-    glUseProgram(0);
+    //Draw Arrows
+
 }
 
 void GLRenderer::resizeGL(int w, int h)

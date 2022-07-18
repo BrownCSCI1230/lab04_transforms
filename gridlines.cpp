@@ -83,7 +83,10 @@ void Gridlines::init(GLRenderer* context) {
 
 
 void Gridlines::draw(GLRenderer* context) {
-    // TODO: draw gridlines
+
+    context->glUseProgram(context->m_gridshader);
+
+
     context->glBindVertexArray(m_vao);
 
     context->glLineWidth(1);
@@ -113,4 +116,6 @@ void Gridlines::draw(GLRenderer* context) {
     context->glDrawArrays(GL_LINES, 0, lineData.size());
 
     context->glBindVertexArray(0);
+
+    context->glUseProgram(0);
 }
