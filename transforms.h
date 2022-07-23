@@ -8,11 +8,11 @@ class Transforms
 public:
     Transforms();
 
-    glm::mat4 getObj1Matrix();
-    glm::mat4 getObj2Matrix();
-    glm::mat4 getObj3Matrix();
+    static glm::mat4 getObj1Matrix();
+    static glm::mat4 getObj2Matrix();
+    static glm::mat4 getObj3Matrix();
 
-    glm::mat4 getViewMatrix();
+    static glm::mat4 getViewMatrix(glm::vec3 pos, glm::vec3 look, glm::vec3 up);
 
 private:
     glm::mat3 getScalingMatrix(float sx, float sy, float sz);

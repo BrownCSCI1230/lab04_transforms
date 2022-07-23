@@ -7,15 +7,8 @@ Axes::Axes() {
 
 }
 
-Axes::Axes(glm::mat4 model, glm::vec3 color)
-{
-    m_model = model;
-    m_color = color;
-}
-
 void Axes::applyTransform(glm::mat4 transform) {
-    m_model = transform;
-    // TODO: update
+    m_model = transform * m_model;
 }
 
 void pushVec3(glm::vec3 vec, std::vector<float> &data) {
@@ -41,7 +34,9 @@ void initializeConeData(std::vector<float> &data) {
     }
 }
 
-void Axes::init(GLRenderer* context) {
+void Axes::init(GLRenderer* context, glm::mat4 model, glm::vec3 color) {
+    m_model = model;
+    m_color = color;
 
     // Axis buffer generation
     context->glGenBuffers(1, &m_axesVbo);
@@ -135,6 +130,8 @@ void Axes::draw(GLRenderer* context) {
 
     context->glBindVertexArray(0);
     context->glUseProgram(0);
+}
 
-
+void Axes::reset() {
+    m_model = glm::mat4();
 }

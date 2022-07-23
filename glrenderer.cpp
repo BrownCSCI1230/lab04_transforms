@@ -2,9 +2,11 @@
 
 #include <QCoreApplication>
 #include <QOpenGLShaderProgram>
-#include "CS1230Lib/resourceloader.h"
+#include "CS1230Lib/shaderloader.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/transform.hpp"
+#include "transforms.h"
+#include <QMouseEvent>
 
 GLRenderer::GLRenderer(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -21,12 +23,12 @@ GLRenderer::~GLRenderer()
 void GLRenderer::initializeGL()
 {
     // Setting up OpenGL for Qt Creator //
-    QSurfaceFormat fmt;
-    fmt.setVersion(3, 1);
-    QOpenGLContext::currentContext()->setFormat(fmt);
     initializeOpenGLFunctions();
 
-    constructViewProjectionMatricies();
+    m_zoom = 2;
+    m_angleX - 6;
+    m_angleY = 0;
+    rebuildMatrices();
 
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
@@ -35,25 +37,20 @@ void GLRenderer::initializeGL()
     glEnable(GL_LINE_SMOOTH);
 
     //load shaders
-    m_gridshader = ResourceLoader::createShaderProgram("Resources/Shaders/grid.vert", "Resources/Shaders/grid.frag"); //Shader setup (DO NOT EDIT)
-    m_axesshader = ResourceLoader::createShaderProgram("Resources/Shaders/axes.vert", "Resources/Shaders/axes.frag"); //Shader setup (DO NOT EDIT)
-    m_arrowshader = ResourceLoader::createShaderProgram("Resources/Shaders/arrow.vert", "Resources/Shaders/arrow.frag"); //Shader setup (DO NOT EDIT)
+    ShaderLoader loader;
+    m_gridshader = loader.createShaderProgram("Resources/Shaders/grid.vert", "Resources/Shaders/grid.frag"); //Shader setup (DO NOT EDIT)
+    m_axesshader = loader.createShaderProgram("Resources/Shaders/axes.vert", "Resources/Shaders/axes.frag"); //Shader setup (DO NOT EDIT)
+    m_arrowshader = loader.createShaderProgram("Resources/Shaders/arrow.vert", "Resources/Shaders/arrow.frag"); //Shader setup (DO NOT EDIT)
 
     //initialize axis objects
-    m_obj1 = Axes(glm::mat4(1), glm::vec3(0.9,1,0.9));
-    m_obj1.init(this);
-
-    m_obj2 = Axes(glm::rotate(glm::translate(glm::mat4(1),
-                                             glm::vec3(5,5,5)),
-                              60.0f,
-                              glm::vec3(0,1,0)),
-                  glm::vec3(1,0.6,0.2));
-
-    m_obj2.init(this);
+    m_student.init(this, glm::mat4(1), glm::vec3(1, 1, 1));
+    m_obj1.init(this, glm::mat4(1), glm::vec3(153.f/255.f, 221.f/255.f, 255.f/255.f));
+    m_obj2.init(this, glm::mat4(1), glm::vec3(187.f/255.f, 204.f/255.f, 51.f/255.f));
+    m_obj3.init(this, glm::mat4(1), glm::vec3(238.f/255.f, 136.f/255.f, 102.f/255.f));
+    m_cam.init(this, glm::mat4(1), glm::vec3(255.f/255.f, 170.f/255.f, 187.f/255.f));
 
     //initialize grid
     m_grid.init(this);
-
 }
 
 void GLRenderer::paintGL()
@@ -93,22 +90,87 @@ void GLRenderer::paintGL()
     //Draw Axes
     m_obj1.draw(this);
     m_obj2.draw(this);
-
-    //Draw Arrows
-
+    m_obj3.draw(this);
+    m_cam.draw(this);
+    m_student.draw(this);
 }
 
 void GLRenderer::resizeGL(int w, int h)
 {
-    constructViewProjectionMatricies();
+    rebuildMatrices();
 }
 
-void GLRenderer::constructViewProjectionMatricies() {
-    m_view = glm::lookAt(glm::vec3(15,4,5),
-                         glm::vec3(0,4,3),
-                         glm::vec3(0,0,1));
-    m_projection = glm::perspective(45.0,
-                                    1.0 * width()/height(),
-                                    0.01,
-                                    100.0);
+//void GLRenderer::constructViewProjectionMatricies() {
+//    m_view = glm::lookAt(glm::vec3(15,4,5),
+//                         glm::vec3(0,4,3),
+//                         glm::vec3(0,0,1));
+//    m_projection = glm::perspective(45.0,
+//                                    1.0 * width()/height(),
+//                                    0.01,
+//                                    100.0);
+//}
+
+void GLRenderer::buttonPressed(Button button) {
+    switch(button) {
+        case Button::OBJECT1:
+            m_student.applyTransform(Transforms::getObj1Matrix());
+            break;
+        case Button::OBJECT2:
+            m_student.applyTransform(Transforms::getObj2Matrix());
+            break;
+        case Button::OBJECT3:
+            m_student.applyTransform(Transforms::getObj3Matrix());
+            break;
+        case Button::VIEW:
+            m_student.applyTransform(Transforms::getViewMatrix(glm::vec3(), glm::vec3(), glm::vec3()));
+            break;
+        case Button::RESET:
+            m_student.reset();
+            break;
+    }
+
+    update();
 }
+
+//---------------------------------------//
+// Camera Movement, Don't worry about it //
+//---------------------------------------//
+
+void GLRenderer::mousePressEvent(QMouseEvent *event) {
+    // Set initial mouse position
+    m_prevMousePos = event->pos();
+}
+
+void GLRenderer::mouseMoveEvent(QMouseEvent *event) {
+    // update angle member variables based on event parameters
+    m_angleX += 10 * (event->position().x() - m_prevMousePos.x()) / (float) width();
+    m_angleY += 10 * (event->position().y() - m_prevMousePos.y()) / (float) height();
+    m_prevMousePos = event->pos();
+    rebuildMatrices();
+}
+
+void GLRenderer::wheelEvent(QWheelEvent *event) {
+    // update zoom based on event parameter
+    m_zoom -= event->angleDelta().y() / 200.f;
+    rebuildMatrices();
+}
+
+void GLRenderer::rebuildMatrices() {
+    // update view matrix by rotating eye vector based on x and y angles
+    m_view = glm::mat4(1);
+    glm::mat4 rot = glm::rotate(-10 * m_angleX,glm::vec3(0,0,1));
+    glm::vec3 eye = glm::vec3(5, 5, 5);
+    eye = glm::vec3(rot * glm::vec4(eye,1));
+
+    rot = glm::rotate(-10 * m_angleY,glm::cross(glm::vec3(0,0,1),eye));
+    eye = glm::vec3(rot * glm::vec4(eye,1));
+
+    eye = eye * m_zoom;
+
+    m_view = glm::lookAt(eye,glm::vec3(0,0,0),glm::vec3(0,0,1));
+
+    m_projection = glm::perspective(45.0,1.0 * width() / height(),0.01,100.0);
+
+    update();
+}
+

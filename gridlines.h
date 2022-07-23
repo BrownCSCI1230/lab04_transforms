@@ -2,7 +2,6 @@
 #define GRIDLINES_H
 
 #include "glm.hpp"
-#include <GL/gl.h>
 #include <vector>
 
 //Forward Declaration of glrenderer
@@ -20,8 +19,8 @@ private:
     std::vector<float> lineData;
     glm::mat4 m_model;
     glm::vec3 m_color;
-    GLuint m_vbo;
-    GLuint m_vao;
+    unsigned int m_vbo;
+    unsigned int m_vao;
 };
 
 #endif // GRIDLINES_H

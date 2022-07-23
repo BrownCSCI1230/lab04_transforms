@@ -2,7 +2,6 @@
 #define AXES_H
 
 #include "glm.hpp"
-#include <GL/gl.h>
 #include <vector>
 
 
@@ -13,20 +12,20 @@ class Axes
 {
 public:
     Axes();
-    Axes(glm::mat4 model, glm::vec3 color);
 
     void applyTransform(glm::mat4 transform);
-    void init(GLRenderer* context);
+    void init(GLRenderer* context, glm::mat4 model, glm::vec3 color);
     void draw(GLRenderer* context);
+    void reset();
 
 private:
     std::vector<float> coneData;
     glm::mat4 m_model;
     glm::vec3 m_color;
-    GLuint m_axesVbo;
-    GLuint m_axesVao;
-    GLuint m_arrowVbo;
-    GLuint m_arrowVao;
+    unsigned int m_axesVbo;
+    unsigned int m_axesVao;
+    unsigned int m_arrowVbo;
+    unsigned int m_arrowVao;
 };
 
 #endif // AXES_H

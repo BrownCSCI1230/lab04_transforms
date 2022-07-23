@@ -2,18 +2,28 @@
 #define GLRENDERER_H
 
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions_3_1>
+#include <QOpenGLExtraFunctions>
 #include "axes.h"
 #include "glm.hpp"
 #include "gridlines.h"
 
 QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
 
-class GLRenderer : public QOpenGLWidget, protected QOpenGLFunctions_3_1
+enum Button {
+    OBJECT1,
+    OBJECT2,
+    OBJECT3,
+    VIEW,
+    RESET
+};
+
+class GLRenderer : public QOpenGLWidget, protected QOpenGLExtraFunctions
 {
 public:
     GLRenderer(QWidget *parent = nullptr);
     ~GLRenderer();
+
+    void buttonPressed(Button button);
 
 protected:
     void initializeGL() override;   //Called once at the start of the program
@@ -21,6 +31,10 @@ protected:
     void resizeGL(int width, int height) override;  //Called when window size changes
 
     void constructViewProjectionMatricies();
+    void mousePressEvent(QMouseEvent *e) override; // used for camera movement
+    void mouseMoveEvent(QMouseEvent *e) override; // used for camera movement
+    void wheelEvent(QWheelEvent *e) override;    // used for camera movement
+    void rebuildMatrices();                     // used for camera movement
 
 private:
     GLuint m_gridshader;    //Stores id for shader program
@@ -39,6 +53,11 @@ private:
 
     friend class Gridlines;
     friend class Axes;
+
+    QPoint m_prevMousePos;
+    float m_angleX;
+    float m_angleY;
+    float m_zoom;
 };
 
 #endif // GLRENDERER_H

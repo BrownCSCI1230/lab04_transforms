@@ -15,7 +15,7 @@ SOURCES += \
     transforms.cpp
 
 HEADERS += \
-    CS1230Lib/resourceloader.h \
+    CS1230Lib/shaderloader.h \
     axes.h \
     glrenderer.h \
     gridlines.h \

@@ -6,6 +6,10 @@
 
 int main(int argc, char *argv[])
 {
+    QSurfaceFormat fmt;
+    fmt.setVersion(4, 1);
+    fmt.setProfile(QSurfaceFormat::CoreProfile);
+    QSurfaceFormat::setDefaultFormat(fmt);
     QApplication a(argc, argv);
 
     QCoreApplication::setApplicationName("Qt Hello GL 2 Example");

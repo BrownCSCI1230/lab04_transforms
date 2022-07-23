@@ -1,6 +1,8 @@
 #include "gridlines.h"
 #include "glrenderer.h"
 #include "glm/gtx/transform.hpp"
+#include <iostream>
+#include <glm/gtx/string_cast.hpp>
 
 Gridlines::Gridlines()
 {
