@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QLabel>
 #include "glrenderer.h"
 
 class MainWindow : public QWidget
@@ -21,6 +22,8 @@ private:
     QPushButton *obj3Button;
     QPushButton *viewButton;
     QPushButton *resetButton;
+    QLabel *transformLabel;
+    QString transformStr;
 
 private slots:
     void obj1Press();
@@ -28,5 +31,7 @@ private slots:
     void obj3Press();
     void viewPress();
     void resetPress();
+
+    void addTransformLabel(QString matrix);
 };
 #endif // MAINWINDOW_H
