@@ -7,6 +7,7 @@
 #include "glm/gtx/transform.hpp"
 #include "transforms.h"
 #include <QMouseEvent>
+#include <glm/gtx/string_cast.hpp>
 
 GLRenderer::GLRenderer(QWidget *parent)
     : QOpenGLWidget(parent)
@@ -25,9 +26,9 @@ void GLRenderer::initializeGL()
     // Setting up OpenGL for Qt Creator //
     initializeOpenGLFunctions();
 
-    m_zoom = 2;
-    m_angleX - 6;
-    m_angleY = 0;
+    m_zoom = 2.2;
+    m_angleX = 2;
+    m_angleY = -1.7;
     rebuildMatrices();
 
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -44,9 +45,20 @@ void GLRenderer::initializeGL()
 
     //initialize axis objects
     m_student.init(this, glm::mat4(1), glm::vec3(1, 1, 1));
-    m_obj1.init(this, glm::mat4(1), glm::vec3(153.f/255.f, 221.f/255.f, 255.f/255.f));
-    m_obj2.init(this, glm::mat4(1), glm::vec3(187.f/255.f, 204.f/255.f, 51.f/255.f));
-    m_obj3.init(this, glm::mat4(1), glm::vec3(238.f/255.f, 136.f/255.f, 102.f/255.f));
+    glm::mat4 m1 = glm::translate(glm::vec3(4, 4, 0)) * glm::rotate(30.f, glm::vec3(0, 0, 1)) * glm::translate(glm::vec3(0, -1, 0)) * glm::scale(glm::vec3(2, -2, 1));
+    std::cout << glm::to_string(m1) << std::endl;
+    m_obj1.init(this, m1,
+                glm::vec3(153.f/255.f, 221.f/255.f, 255.f/255.f));
+    m_obj2.init(this, glm::mat4(    0.612372, 0.353553, -0.707107, 0.000000,
+                                   -0.500000, 0.866025, 0.000000, 0.000000,
+                                    0.612372, 0.353553, 0.707107, 0.000000,
+                                    4.000000, 4.000000, 0.000000, 1.000000),
+                glm::vec3(187.f/255.f, 204.f/255.f, 51.f/255.f));
+    m_obj3.init(this, glm::mat4(    0.500000, 0.000000, 0.000000, 0.000000,
+                                    0.000000, 0.433013, 0.250000, 0.000000,
+                                    0.000000, -0.250000, 0.433013, 0.000000,
+                                    3.000000, 1.000000, 6.000000, 1.000000),
+                glm::vec3(238.f/255.f, 136.f/255.f, 102.f/255.f));
     m_cam.init(this, glm::mat4(1), glm::vec3(255.f/255.f, 170.f/255.f, 187.f/255.f));
 
     //initialize grid
@@ -99,16 +111,6 @@ void GLRenderer::resizeGL(int w, int h)
 {
     rebuildMatrices();
 }
-
-//void GLRenderer::constructViewProjectionMatricies() {
-//    m_view = glm::lookAt(glm::vec3(15,4,5),
-//                         glm::vec3(0,4,3),
-//                         glm::vec3(0,0,1));
-//    m_projection = glm::perspective(45.0,
-//                                    1.0 * width()/height(),
-//                                    0.01,
-//                                    100.0);
-//}
 
 void GLRenderer::buttonPressed(Button button) {
     switch(button) {
