@@ -19,9 +19,9 @@ MainWindow::MainWindow()
 
     QHBoxLayout *hLayout = new QHBoxLayout;
 
-    QVBoxLayout *vLayout = new QVBoxLayout;
-    vLayout->setAlignment(Qt::AlignTop);
-    hLayout->addLayout(vLayout);
+    QGridLayout *gridLayout = new QGridLayout;
+    gridLayout->setAlignment(Qt::AlignTop);
+    hLayout->addLayout(gridLayout);
 
     glRenderer = new GLRenderer;
     glRenderer->setEnabled(true);
@@ -29,23 +29,41 @@ MainWindow::MainWindow()
 
     this->setLayout(hLayout);
 
-    obj1Button = new QPushButton("Apply Obj1 Matrix");
-    obj2Button = new QPushButton("Apply Obj2 Matrix");
-    obj3Button = new QPushButton("Apply Obj3 Matrix");
-    viewButton = new QPushButton("Apply View Matrix");
-    resetButton = new QPushButton("Reset Transformation");
+    buttonA = new QPushButton("A");
+    buttonB = new QPushButton("B");
+    buttonC = new QPushButton("C");
+    buttonD = new QPushButton("D");
+    buttonView = new QPushButton("View");
+    buttonAInv = new QPushButton("A⁻¹");
+    buttonBInv = new QPushButton("B⁻¹");
+    buttonCInv = new QPushButton("C⁻¹");
+    buttonDInv = new QPushButton("D⁻¹");
+    buttonViewInv = new QPushButton("View⁻¹");
+    buttonReset = new QPushButton("Reset");
 
-    vLayout->addWidget(obj1Button);
-    vLayout->addWidget(obj2Button);
-    vLayout->addWidget(obj3Button);
-    vLayout->addWidget(viewButton);
-    vLayout->addWidget(resetButton);
+    gridLayout->addWidget(buttonA, 0, 0);
+    gridLayout->addWidget(buttonB, 1, 0);
+    gridLayout->addWidget(buttonC, 2, 0);
+    gridLayout->addWidget(buttonD, 3, 0);
+    gridLayout->addWidget(buttonView, 4, 0);
+    gridLayout->addWidget(buttonAInv, 0, 1);
+    gridLayout->addWidget(buttonBInv, 1, 1);
+    gridLayout->addWidget(buttonCInv, 2, 1);
+    gridLayout->addWidget(buttonDInv, 3, 1);
+    gridLayout->addWidget(buttonViewInv, 4, 1);
+    gridLayout->addWidget(buttonReset, 5, 0, 1, 2);
 
-    connect(obj1Button, &QPushButton::released, this, &MainWindow::obj1Press);
-    connect(obj2Button, &QPushButton::released, this, &MainWindow::obj2Press);
-    connect(obj3Button, &QPushButton::released, this, &MainWindow::obj3Press);
-    connect(viewButton, &QPushButton::released, this, &MainWindow::viewPress);
-    connect(resetButton, &QPushButton::released, this, &MainWindow::resetPress);
+    connect(buttonA, &QPushButton::released, this, &MainWindow::pressA);
+    connect(buttonB, &QPushButton::released, this, &MainWindow::pressB);
+    connect(buttonC, &QPushButton::released, this, &MainWindow::pressC);
+    connect(buttonD, &QPushButton::released, this, &MainWindow::pressD);
+    connect(buttonView, &QPushButton::released, this, &MainWindow::pressView);
+    connect(buttonAInv, &QPushButton::released, this, &MainWindow::pressAInv);
+    connect(buttonBInv, &QPushButton::released, this, &MainWindow::pressBInv);
+    connect(buttonCInv, &QPushButton::released, this, &MainWindow::pressCInv);
+    connect(buttonDInv, &QPushButton::released, this, &MainWindow::pressDInv);
+    connect(buttonViewInv, &QPushButton::released, this, &MainWindow::pressViewInv);
+    connect(buttonReset, &QPushButton::released, this, &MainWindow::pressReset);
 
     transformStr = "you";
     transformLabel = new QLabel();
@@ -54,35 +72,65 @@ MainWindow::MainWindow()
     font.setBold(true);
     transformLabel->setFont(font);
     transformLabel->setText(transformStr);
-    vLayout->addWidget(transformLabel);
+    gridLayout->addWidget(transformLabel, 6, 0, 1, 2);
 }
 
 MainWindow::~MainWindow()
 {
 }
 
-void MainWindow::obj1Press() {
-    glRenderer->buttonPressed(Button::OBJECT1);
-    this->addTransformLabel("M₁");
+void MainWindow::pressA() {
+    glRenderer->buttonPressed(A);
+    this->addTransformLabel("A");
 }
 
-void MainWindow::obj2Press() {
-    glRenderer->buttonPressed(Button::OBJECT2);
-    this->addTransformLabel("M₂");
+void MainWindow::pressB() {
+    glRenderer->buttonPressed(B);
+    this->addTransformLabel("B");
 }
 
-void MainWindow::obj3Press() {
-    glRenderer->buttonPressed(Button::OBJECT3);
-    this->addTransformLabel("M₃");
+void MainWindow::pressC() {
+    glRenderer->buttonPressed(C);
+    this->addTransformLabel("C");
 }
 
-void MainWindow::viewPress() {
-    glRenderer->buttonPressed(Button::VIEW);
+void MainWindow::pressD() {
+    glRenderer->buttonPressed(D);
+    this->addTransformLabel("D");
+}
+
+void MainWindow::pressView() {
+    glRenderer->buttonPressed(VIEW);
     this->addTransformLabel("V");
 }
 
-void MainWindow::resetPress() {
-    glRenderer->buttonPressed(Button::RESET);
+void MainWindow::pressAInv() {
+    glRenderer->buttonPressed(A_INV);
+    this->addTransformLabel("A⁻¹");
+}
+
+void MainWindow::pressBInv() {
+    glRenderer->buttonPressed(B_INV);
+    this->addTransformLabel("B⁻¹");
+}
+
+void MainWindow::pressCInv() {
+    glRenderer->buttonPressed(C_INV);
+    this->addTransformLabel("C⁻¹");
+}
+
+void MainWindow::pressDInv() {
+    glRenderer->buttonPressed(D_INV);
+    this->addTransformLabel("D⁻¹");
+}
+
+void MainWindow::pressViewInv() {
+    glRenderer->buttonPressed(VIEW_INV);
+    this->addTransformLabel("V⁻¹");
+}
+
+void MainWindow::pressReset() {
+    glRenderer->buttonPressed(RESET);
     transformStr = "you";
     transformLabel->setText(transformStr);
 }

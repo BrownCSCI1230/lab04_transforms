@@ -10,10 +10,16 @@
 QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
 
 enum Button {
-    OBJECT1,
-    OBJECT2,
-    OBJECT3,
+    A,
+    B,
+    C,
+    D,
     VIEW,
+    A_INV,
+    B_INV,
+    C_INV,
+    D_INV,
+    VIEW_INV,
     RESET
 };
 
@@ -30,7 +36,6 @@ protected:
     void paintGL() override;    //Called every frame in a loop
     void resizeGL(int width, int height) override;  //Called when window size changes
 
-    void constructViewProjectionMatricies();
     void mousePressEvent(QMouseEvent *e) override; // used for camera movement
     void mouseMoveEvent(QMouseEvent *e) override; // used for camera movement
     void wheelEvent(QWheelEvent *e) override;    // used for camera movement

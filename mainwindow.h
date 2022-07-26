@@ -17,20 +17,37 @@ public:
 private:
     GLRenderer *glRenderer;
 
-    QPushButton *obj1Button;
-    QPushButton *obj2Button;
-    QPushButton *obj3Button;
-    QPushButton *viewButton;
-    QPushButton *resetButton;
+    QPushButton *buttonA;
+    QPushButton *buttonB;
+    QPushButton *buttonC;
+    QPushButton *buttonD;
+    QPushButton *buttonView;
+
+    QPushButton *buttonAInv;
+    QPushButton *buttonBInv;
+    QPushButton *buttonCInv;
+    QPushButton *buttonDInv;
+    QPushButton *buttonViewInv;
+
+    QPushButton *buttonReset;
+
     QLabel *transformLabel;
     QString transformStr;
 
 private slots:
-    void obj1Press();
-    void obj2Press();
-    void obj3Press();
-    void viewPress();
-    void resetPress();
+    void pressA();
+    void pressB();
+    void pressC();
+    void pressD();
+    void pressView();
+
+    void pressAInv();
+    void pressBInv();
+    void pressCInv();
+    void pressDInv();
+    void pressViewInv();
+
+    void pressReset();
 
     void addTransformLabel(QString matrix);
 };

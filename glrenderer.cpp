@@ -45,21 +45,26 @@ void GLRenderer::initializeGL()
 
     //initialize axis objects
     m_student.init(this, glm::mat4(1), glm::vec3(1, 1, 1));
-    glm::mat4 m1 = glm::translate(glm::vec3(4, 4, 0)) * glm::rotate(30.f, glm::vec3(0, 0, 1)) * glm::translate(glm::vec3(0, -1, 0)) * glm::scale(glm::vec3(2, -2, 1));
-    std::cout << glm::to_string(m1) << std::endl;
-    m_obj1.init(this, m1,
+    m_obj1.init(this, glm::mat4(    1.732051,  1.000000,  0.000000,  0.000000,
+                                    1.000000, -1.732051, -0.000000, -0.000000,
+                                    0.000000,  0.000000,  1.000000,  0.000000,
+                                    4.500000,  3.133975,  0.000000,  1.000000),
                 glm::vec3(153.f/255.f, 221.f/255.f, 255.f/255.f));
-    m_obj2.init(this, glm::mat4(    0.612372, 0.353553, -0.707107, 0.000000,
-                                   -0.500000, 0.866025, 0.000000, 0.000000,
-                                    0.612372, 0.353553, 0.707107, 0.000000,
-                                    4.000000, 4.000000, 0.000000, 1.000000),
+    m_obj2.init(this, glm::mat4(    0.612372,  0.353553, -0.707107,  0.000000,
+                                   -0.500000,  0.866025,  0.000000,  0.000000,
+                                    0.612372,  0.353553,  0.707107,  0.000000,
+                                    4.000000,  4.000000,  0.000000,  1.000000),
                 glm::vec3(187.f/255.f, 204.f/255.f, 51.f/255.f));
-    m_obj3.init(this, glm::mat4(    0.500000, 0.000000, 0.000000, 0.000000,
-                                    0.000000, 0.433013, 0.250000, 0.000000,
-                                    0.000000, -0.250000, 0.433013, 0.000000,
-                                    3.000000, 1.000000, 6.000000, 1.000000),
+    m_obj3.init(this, glm::mat4(    0.500000,  0.000000,  0.000000,  0.000000,
+                                    0.000000,  0.433013,  0.250000,  0.000000,
+                                    0.000000, -0.250000,  0.433013,  0.000000,
+                                    3.000000,  1.000000,  6.000000,  1.000000),
                 glm::vec3(238.f/255.f, 136.f/255.f, 102.f/255.f));
-    m_cam.init(this, glm::mat4(1), glm::vec3(255.f/255.f, 170.f/255.f, 187.f/255.f));
+    m_cam.init(this, glm::mat4(    -0.707107,  0.707107,  0.000000, -0.000000,
+                                   -0.235702, -0.235702,  0.942809,  0.000000,
+                                    0.666667,  0.666667,  0.333333, -0.000000,
+                                    1.000000,  3.000000,  4.000000,  1.000000),
+               glm::vec3(255.f/255.f, 170.f/255.f, 187.f/255.f));
 
     //initialize grid
     m_grid.init(this);
@@ -114,19 +119,37 @@ void GLRenderer::resizeGL(int w, int h)
 
 void GLRenderer::buttonPressed(Button button) {
     switch(button) {
-        case Button::OBJECT1:
-            m_student.applyTransform(Transforms::getObj1Matrix());
+        case A:
+            m_student.applyTransform(Transforms::getMatrixA());
             break;
-        case Button::OBJECT2:
-            m_student.applyTransform(Transforms::getObj2Matrix());
+        case B:
+            m_student.applyTransform(Transforms::getMatrixB());
             break;
-        case Button::OBJECT3:
-            m_student.applyTransform(Transforms::getObj3Matrix());
+        case C:
+            m_student.applyTransform(Transforms::getMatrixC());
             break;
-        case Button::VIEW:
-            m_student.applyTransform(Transforms::getViewMatrix(glm::vec3(), glm::vec3(), glm::vec3()));
+        case D:
+            m_student.applyTransform(Transforms::getMatrixD());
             break;
-        case Button::RESET:
+        case VIEW:
+            m_student.applyTransform(Transforms::getViewMatrix(glm::vec3(1, 3, 4), glm::vec3(-2, -2, -1), glm::vec3(0, 0, 1)));
+            break;
+        case A_INV:
+            m_student.applyTransform(glm::inverse(Transforms::getMatrixA()));
+            break;
+        case B_INV:
+            m_student.applyTransform(glm::inverse(Transforms::getMatrixB()));
+            break;
+        case C_INV:
+            m_student.applyTransform(glm::inverse(Transforms::getMatrixC()));
+            break;
+        case D_INV:
+            m_student.applyTransform(glm::inverse(Transforms::getMatrixD()));
+            break;
+        case VIEW_INV:
+            m_student.applyTransform(glm::inverse(Transforms::getViewMatrix(glm::vec3(1, 3, 4), glm::vec3(-2, -2, -1), glm::vec3(0, 0, 1))));
+            break;
+        case RESET:
             m_student.reset();
             break;
     }
