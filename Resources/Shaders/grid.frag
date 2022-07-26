@@ -14,13 +14,13 @@ void main() {
 
    fragColor = vec4(1.0, 1.0, 1.0, 0.2 * mixFactor);
 
-   if (worldPos.y == 0 && worldPos.z == 0) {
+   if (abs(worldPos.y) < 0.001 && abs(worldPos.z) < 0.001) {
        fragColor = vec4(1.0, 0.0, 0.0, 1.0 * mixFactor);
    }
-   if (worldPos.x == 0 && worldPos.z == 0) {
+   if (abs(worldPos.x) < 0.001 && abs(worldPos.z) < 0.001) {
        fragColor = vec4(0.0, 1.0, 0.0, 1.0 * mixFactor);
    }
-   if (worldPos.x == 0 && worldPos.y == 0) {
+   if (abs(worldPos.x) < 0.001 && abs(worldPos.y) < 0.001) {
        fragColor = vec4(0.0, 0.0, 1.0, 1.0 * mixFactor);
    }
 }
