@@ -132,7 +132,7 @@ void GLRenderer::buttonPressed(Button button) {
             m_student.applyTransform(Transforms::getMatrixD());
             break;
         case VIEW:
-            m_student.applyTransform(Transforms::getViewMatrix(glm::vec3(1, 3, 4), glm::vec3(-2, -2, -1), glm::vec3(0, 0, 1)));
+            m_student.applyTransform(Transforms::getViewMatrix(glm::vec3(1, 4, 3), glm::vec3(-2, -1, -2), glm::vec3(0, 1, 0)));
             break;
         case A_INV:
             m_student.applyTransform(glm::inverse(Transforms::getMatrixA()));
@@ -147,7 +147,7 @@ void GLRenderer::buttonPressed(Button button) {
             m_student.applyTransform(glm::inverse(Transforms::getMatrixD()));
             break;
         case VIEW_INV:
-            m_student.applyTransform(glm::inverse(Transforms::getViewMatrix(glm::vec3(1, 3, 4), glm::vec3(-2, -2, -1), glm::vec3(0, 0, 1))));
+            m_student.applyTransform(glm::inverse(Transforms::getViewMatrix(glm::vec3(1, 4, 3), glm::vec3(-2, -1, -2), glm::vec3(0, 1, 0))));
             break;
         case RESET:
             m_student.reset();
