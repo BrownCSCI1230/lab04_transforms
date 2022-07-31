@@ -45,25 +45,25 @@ void GLRenderer::initializeGL()
 
     //initialize axis objects
     m_student.init(this, glm::mat4(1), glm::vec3(1, 1, 1));
-    m_obj1.init(this, glm::mat4(    1.732051,  1.000000,  0.000000,  0.000000,
-                                    1.000000, -1.732051, -0.000000, -0.000000,
-                                    0.000000,  0.000000,  1.000000,  0.000000,
-                                    4.500000,  3.133975,  0.000000,  1.000000),
+    m_obj1.init(this, glm::mat4(1.732051, 0.000000, -1.000000, 0.000000,
+                                0.000000, 1.000000, 0.000000, 0.000000,
+                                -1.000000, -0.000000, -1.732051, -0.000000,
+                                3.500000, 0.000000, 3.133975, 1.000000),
                 glm::vec3(153.f/255.f, 221.f/255.f, 255.f/255.f));
-    m_obj2.init(this, glm::mat4(    0.612372,  0.353553, -0.707107,  0.000000,
-                                   -0.500000,  0.866025,  0.000000,  0.000000,
-                                    0.612372,  0.353553,  0.707107,  0.000000,
-                                    4.000000,  4.000000,  0.000000,  1.000000),
+    m_obj2.init(this, glm::mat4(0.612372, 0.707107, -0.353553, 0.000000,
+                                -0.612372, 0.707107, 0.353553, 0.000000,
+                                0.500000, 0.000000, 0.866025, 0.000000,
+                                4.000000, 0.000000, 4.000000, 1.000000),
                 glm::vec3(187.f/255.f, 204.f/255.f, 51.f/255.f));
-    m_obj3.init(this, glm::mat4(    0.500000,  0.000000,  0.000000,  0.000000,
-                                    0.000000,  0.433013,  0.250000,  0.000000,
-                                    0.000000, -0.250000,  0.433013,  0.000000,
-                                    3.000000,  1.000000,  6.000000,  1.000000),
+    m_obj3.init(this, glm::mat4(0.500000, 0.000000, 0.000000, 0.000000,
+                                0.000000, 0.433013, 0.250000, 0.000000,
+                                0.000000, -0.250000, 0.433013, 0.000000,
+                                3.000000, 6.000000, 1.000000, 1.000000),
                 glm::vec3(238.f/255.f, 136.f/255.f, 102.f/255.f));
-    m_cam.init(this, glm::mat4(    -0.707107,  0.707107,  0.000000, -0.000000,
-                                   -0.235702, -0.235702,  0.942809,  0.000000,
-                                    0.666667,  0.666667,  0.333333, -0.000000,
-                                    1.000000,  3.000000,  4.000000,  1.000000),
+    m_cam.init(this, glm::mat4(0.707107, -0.000000, -0.707107, -0.000000,
+                               0.235702, 0.942809, 0.235702, -0.000000,
+                               0.666667, -0.333333, 0.666667, -0.000000,
+                               1.000000, 4.000000, 3.000000, 1.000000),
                glm::vec3(255.f/255.f, 170.f/255.f, 187.f/255.f));
 
     //initialize grid
@@ -168,33 +168,33 @@ void GLRenderer::mousePressEvent(QMouseEvent *event) {
 
 void GLRenderer::mouseMoveEvent(QMouseEvent *event) {
     // update angle member variables based on event parameters
-    m_angleX += 10 * (event->position().x() - m_prevMousePos.x()) / (float) width();
-    m_angleY += 10 * (event->position().y() - m_prevMousePos.y()) / (float) height();
+    m_angleY += 10 * (event->position().x() - m_prevMousePos.x()) / (float) width();
+    m_angleX -= 10 * (event->position().y() - m_prevMousePos.y()) / (float) height();
     m_prevMousePos = event->pos();
     rebuildMatrices();
 }
 
 void GLRenderer::wheelEvent(QWheelEvent *event) {
     // update zoom based on event parameter
-    m_zoom -= event->angleDelta().y() / 200.f;
+    m_zoom = glm::min(glm::max(0.01f, m_zoom - event->angleDelta().y() / 200.f), 10.f);
     rebuildMatrices();
 }
 
 void GLRenderer::rebuildMatrices() {
     // update view matrix by rotating eye vector based on x and y angles
     m_view = glm::mat4(1);
-    glm::mat4 rot = glm::rotate(-10 * m_angleX,glm::vec3(0,0,1));
+    glm::mat4 rot = glm::rotate(-10 * m_angleX, glm::vec3(0,0,1));
     glm::vec3 eye = glm::vec3(5, 5, 5);
-    eye = glm::vec3(rot * glm::vec4(eye,1));
+    eye = glm::vec3(rot * glm::vec4(eye, 1));
 
-    rot = glm::rotate(-10 * m_angleY,glm::cross(glm::vec3(0,0,1),eye));
-    eye = glm::vec3(rot * glm::vec4(eye,1));
+    rot = glm::rotate(-10 * m_angleY, glm::cross(glm::vec3(0,0,1), eye));
+    eye = glm::vec3(rot * glm::vec4(eye, 1));
 
     eye = eye * m_zoom;
 
-    m_view = glm::lookAt(eye,glm::vec3(0,0,0),glm::vec3(0,0,1));
+    m_view = glm::lookAt(eye,glm::vec3(0,0,0), glm::vec3(0,1,0));
 
-    m_projection = glm::perspective(45.0,1.0 * width() / height(),0.01,100.0);
+    m_projection = glm::perspective(45.0, 1.0 * width() / height(), 0.01, 100.0);
 
     update();
 }
