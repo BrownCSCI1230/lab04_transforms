@@ -114,11 +114,11 @@ $$ \begin{bmatrix} \cos\frac{\pi}{6} && -\sin\frac{\pi}{6} \\\ \sin\frac{\pi}{6}
 
 In 3D, this is a bit more complex. Rather than always rotating about the origin in a fixed and consistent way, 3D allows for rotation around any arbitrary axis. There are many ways to handle this (as covered during the lectures), but for now we'll use the axis-aligned **Euler angles** approach as this is the simplest for constructing your own matrices. For this, we define the rotation about each standard axis independently, and then compose them. We use $R_n$ to notate the rotation matrix about the $n$-axis.
 
-$$ R_x = \begin{bmatrix} 1 && 0 && 0 \\\ 0 && \cos\theta && \sin\theta \\\ 0 && -\sin\theta && \cos\theta \end{bmatrix} $$
+$$ R_x = \begin{bmatrix} 1 && 0 && 0 \\\ 0 && \cos\theta && -\sin\theta \\\ 0 && \sin\theta && \cos\theta \end{bmatrix} $$
 
-$$ R_y = \begin{bmatrix} \cos\theta && 0 && -\sin\theta \\\ 0 && 1 && 0 \\\ \sin\theta && 0 && \cos\theta \end{bmatrix} $$
+$$ R_y = \begin{bmatrix} \cos\theta && 0 && \sin\theta \\\ 0 && 1 && 0 \\\ -\sin\theta && 0 && \cos\theta \end{bmatrix} $$
 
-$$ R_z = \begin{bmatrix} \cos\theta && \sin\theta && 0 \\\ -\sin\theta && \cos\theta && 0 \\\ 0 && 0 && 1 \end{bmatrix} $$
+$$ R_z = \begin{bmatrix} \cos\theta && -\sin\theta && 0 \\\ \sin\theta && \cos\theta && 0 \\\ 0 && 0 && 1 \end{bmatrix} $$
 
 |**_Task 2:_**|
 |:---|
